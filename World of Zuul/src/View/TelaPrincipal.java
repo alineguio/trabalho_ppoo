@@ -48,9 +48,11 @@ public class TelaPrincipal {
     private JTextArea inpInfos;
     private JTextField inpEntrada;
     private Clip musicaPrincipal;
+    private String localAtual;
     
     
     public TelaPrincipal() {
+        localAtual = "tv";
         localPosicao = new HashMap<>();
         inicializarHasMap();
         
@@ -70,23 +72,14 @@ public class TelaPrincipal {
     
     private void tocarMusica(){
         try{
-            
-            
             URL som = getClass().getClassLoader().getResource("assets/sounds/musica.wav");
-            
             AudioInputStream audioInputStream =  AudioSystem.getAudioInputStream(som); 
-            
-            // create clip reference 
             musicaPrincipal = AudioSystem.getClip(); 
-
-            // open audioInputStream to the clip 
             musicaPrincipal.open(audioInputStream); 
-
             musicaPrincipal.loop(Clip.LOOP_CONTINUOUSLY);
             musicaPrincipal.start();
-            //System.out.println(caminho);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(janela, e.getMessage());
+            JOptionPane.showMessageDialog(janela,"Erro ao reproduzir som: "+e.getMessage());
         }
     }
     
@@ -94,37 +87,43 @@ public class TelaPrincipal {
         try{
             URL som = getClass().getClassLoader().getResource("assets/sounds/"+nomeMusica);       
             AudioInputStream audioInputStream =  AudioSystem.getAudioInputStream(som); 
-            Clip clip = AudioSystem.getClip(); 
-            clip.open(audioInputStream); 
-
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(0);
             clip.start();
+            
         }catch(Exception e){
             JOptionPane.showMessageDialog(janela, "Não foi possível reproduzir um som: "+nomeMusica );
         }
     }
     
-    public void abrirPorta(String novoAmbiente){
+    private void esperarSegundos(int tempo){
         try{
-            escurecerCenario();
-            painelCentro.revalidate();
-            painelCentro.repaint();
-            TimeUnit.SECONDS.sleep(1);
-            tocaEfeitosSonoros("abrindo_porta.wav");
-            TimeUnit.SECONDS.sleep(2);
-            posicionaPersonagem(novoAmbiente);
-            painelCentro.revalidate();
-            painelCentro.repaint();
+            TimeUnit.SECONDS.sleep(tempo);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(janela, "ERRO!");
+            System.err.println("Erro ao esperar "+tempo+" segundos.");
         }
-        
     }
     
+    public void abrirPorta(String novoAmbiente){
+        escurecerCenario();
+        esperarSegundos(1);
+        tocaEfeitosSonoros("abrindo_porta.wav");
+        esperarSegundos(2);
+        posicionaPersonagem(novoAmbiente);
+    }
     
+    public void portaTrancada(){
+        escurecerCenario();
+        esperarSegundos(1);
+        tocaEfeitosSonoros("porta_fechada.wav");
+        esperarSegundos(2);
+        posicionaPersonagem(localAtual);
+    }
     
     private void montarJanela(){
         janela.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        janela.setResizable(false);
+        //janela.setResizable(false);
         janela.setLayout(new BorderLayout());
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -216,7 +215,7 @@ public class TelaPrincipal {
         painelCentro = new ImagePanel(img);
         painelCentro.setLayout(gridLayoutCentro);
 
-        posicionaPersonagem("tv");
+        posicionaPersonagem(localAtual);
         
         
     }
@@ -241,19 +240,19 @@ public class TelaPrincipal {
                 }else{
                     JLabel rotulo = new JLabel("");
                     rotulo.setOpaque(true);
-                    
                     int opacidade;
                     int conta = Math.abs(i - posI) + Math.abs(j - posJ) - 2;
-                    opacidade = Math.abs(conta * 30);
+                    opacidade = Math.abs(conta * 80);
                     if(opacidade > 255) opacidade= 255;
-                    
-                    
                     Color escuro = new Color(0,0,0,opacidade);
                     rotulo.setBackground(escuro);
                     painelCentro.add(rotulo);
                 }
             }
         }
+        localAtual = local;
+        painelCentro.revalidate();
+        painelCentro.repaint();
     } 
     
     public void exibir(){
@@ -331,6 +330,8 @@ public class TelaPrincipal {
                 painelCentro.add(rotulo);
             }
         }
+        painelCentro.revalidate();
+        painelCentro.repaint();
     }
     
     
