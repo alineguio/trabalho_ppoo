@@ -14,11 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main{
     public static void main(String[] args) throws Exception{
-        TelaPrincipal tp = new TelaPrincipal();
-        tp.exibir();
-        while(true){
-            TimeUnit.SECONDS.sleep(5);
-            tp.portaTrancada();
-        }
+        Controlador c = new Controlador();
+        
     }
+    
 }
