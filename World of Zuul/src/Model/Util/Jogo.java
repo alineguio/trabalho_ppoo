@@ -16,7 +16,12 @@ public class Jogo {
     private final ArrayList<Item> itensGerados;
     private final ArrayList<Ambiente> ambientes;
     private static final Jogo instance = null;
-
+    
+    /**Construtor com os itens gerados e ambientes e com o analisador gerado com o Construtor Singleton 
+     * 
+     * @param itensGerados - itens gerados do jogo atual
+     * @param ambientes - ambientes do jogo
+     */
     private Jogo(ArrayList<Item> itensGerados, ArrayList<Ambiente> ambientes) {
         this.analisador = Analisador.getInstance();
         this.itensGerados = itensGerados;
@@ -24,6 +29,12 @@ public class Jogo {
     }
     
     public static Jogo getInstance(ArrayList<Item> itensGerados, ArrayList<Ambiente> ambientes){
+    /** Construtor Singleton
+     * 
+     * @param itensGerados - itens gerados do jogo atual
+     * @param ambientes - ambientes do jogo
+     * @return - Objeto da classe Jogo
+    */
         if (instance != null){
             return instance;
         }

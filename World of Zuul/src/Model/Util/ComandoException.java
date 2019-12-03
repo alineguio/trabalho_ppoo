@@ -10,11 +10,15 @@ package Model.Util;
  * @author alfarr
  */
 public class ComandoException extends Exception{
-    
+    /** Construtor padrão da classe Exception    */
     public ComandoException(){
         super();
     }
     
+    /** Construtor com mensagem de erro da classe Comando
+     * 
+     * @param message - texto de erro
+     */
     public ComandoException(String message){
         super("Erro em Comando: " + message);
     }
