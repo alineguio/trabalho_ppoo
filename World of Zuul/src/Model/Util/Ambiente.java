@@ -16,7 +16,7 @@ public class Ambiente {
     private final String descricao;
     private final HashMap<String, Ambiente> saidas;
       
-    Ambiente(String descricao){
+    public Ambiente(String descricao){
         this.descricao = descricao;
         saidas = new HashMap<>();
     }

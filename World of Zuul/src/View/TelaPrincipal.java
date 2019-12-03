@@ -431,6 +431,10 @@ public class TelaPrincipal extends JFrame{
         pos[1] = 9;
         localPosicao.put("banheiro2", pos);
         
+        pos = new int[2];
+        pos[0] = 3;
+        pos[1] = 6;
+        localPosicao.put("corredor", pos);
         
     }
 

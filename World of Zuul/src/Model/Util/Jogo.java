@@ -23,7 +23,7 @@ public class Jogo {
         this.ambientes = ambientes;
     }
     
-    public Jogo getInstance(ArrayList<Item> itensGerados, ArrayList<Ambiente> ambientes){
+    public static Jogo getInstance(ArrayList<Item> itensGerados, ArrayList<Ambiente> ambientes){
         if (instance != null){
             return instance;
         }
