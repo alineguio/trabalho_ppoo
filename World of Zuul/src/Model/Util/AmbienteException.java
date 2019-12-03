@@ -10,10 +10,15 @@ package Model.Util;
  * @author alfarr
  */
 public class AmbienteException extends Exception{
+    /** Construtor padrão da classe Exception    */
     public AmbienteException(){
         super();
     }
     
+    /** Construtor com mensagem de erro da classe Ambiente
+     * 
+     * @param message - texto de erro
+     */
     public AmbienteException(String message){
         super("Erro em Ambiente: " + message);
     }
