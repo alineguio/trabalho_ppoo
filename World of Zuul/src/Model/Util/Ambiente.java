@@ -7,6 +7,7 @@ package Model.Util;
 
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  *
@@ -68,4 +69,19 @@ public class Ambiente {
         return rStr;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Ambiente ambiente = (Ambiente) o;
+        // field comparison
+        return Objects.equals(descricao, ambiente.descricao);
+    }
 }

@@ -5,8 +5,6 @@
  */
 package Controll;
 
-import View.TelaPrincipal;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -15,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 public class Main{
     public static void main(String[] args) throws Exception{
         Controlador c = Controlador.getInstance();
-        c.acaoComando("quarto2");
     }
     
 }

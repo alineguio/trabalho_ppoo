@@ -36,8 +36,8 @@ public class Dica extends Item{
      * @throws ItemException 
      */
     @Override
-    public void fazerAcao() throws ItemException {
-        System.out.println(texto);
+    public String fazerAcao() throws ItemException {
+        return texto;
     }
     
     
