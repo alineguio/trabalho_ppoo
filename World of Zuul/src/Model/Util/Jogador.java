@@ -34,7 +34,7 @@ public class Jogador {
      * @param ambienteAtual - ambiente no qual o jogador começa jogando
      * @return Objeto da classe Jogador
      */
-    public Jogador getInstance(int chances, Ambiente ambienteAtual){
+    public static Jogador getInstance(int chances, Ambiente ambienteAtual){
         if(instance != null){
             return instance;
         }

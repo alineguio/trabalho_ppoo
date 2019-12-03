@@ -41,6 +41,30 @@ public class Jogo {
         
         return new Jogo(itensGerados, ambientes);
     }
+    
+    /** Retorna o objeto do ambiente com este nome
+     * 
+     * @param nome - nome do ambiente desejado
+     * @return Objeto da classe Ambiente
+     * @throws Model.Util.AmbienteException
+     */
+    public Ambiente getAmbiente(String nome) throws AmbienteException{
+        
+        Ambiente rAmbiente = null;
+        
+        for(Ambiente ambiente : ambientes){
+            if (ambiente.getDescricao().equals(nome)){
+                rAmbiente = ambiente;
+            }
+        }
+        
+        if (rAmbiente == null){
+            throw new AmbienteException("Erro em getAmbiente(String nome), ambiente não encontrado!");
+        }
+        
+        return rAmbiente;
+        
+    }
       
     
 }

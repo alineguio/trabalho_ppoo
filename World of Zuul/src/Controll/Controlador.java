@@ -6,11 +6,12 @@
 package Controll;
 
 import Model.Util.Ambiente;
+import Model.Util.AmbienteException;
 import Model.Util.Jogo;
 import View.TelaInicial;
 import View.TelaPrincipal;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
 import javax.swing.JFrame;
 
 /**
@@ -22,24 +23,33 @@ import javax.swing.JFrame;
  * 
  * @author alfarr
  */
-public class Controlador {
+public class Controlador implements ControladorInterface{
     JFrame janelaPrincipal;
     TelaPrincipal tp;
     Jogo jogoModel;
-    private static Controlador instance = null;
+    private static final Controlador instance = null;
+    private final JogadorController jogadorController;
+    private Random random;
     
     
-    private Controlador() {
+    /** Construtor da GUI, do core do jogo e do 
+     * 
+     * @throws AmbienteException - lugar de início não encontrado
+     */
+    private Controlador() throws AmbienteException {
         tp = null;
         janelaPrincipal = new TelaInicial(this);
         janelaPrincipal.setVisible(true);
+        jogoModel = Jogo.getInstance(null, criarAmbientes());
+        jogadorController = JogadorController.getInstance(jogoModel.getAmbiente("tv"));        
     }
     
     /** Construtor Singleton
      * 
      * @return Objeto da classe Controlador
+     * @throws Model.Util.AmbienteException - lugar de início não encontrado
      */
-    public static Controlador getInstance(){
+    public static Controlador getInstance() throws AmbienteException{
         if (instance != null){
             return instance;
         }
@@ -50,6 +60,7 @@ public class Controlador {
     /** Método que inicializa o jogo e desenha a tela
      * 
      */
+    @Override
     public void jogar(){
         tp = new TelaPrincipal(this);
         janelaPrincipal.dispose();
@@ -63,14 +74,15 @@ public class Controlador {
      * 
      * @param comando - texto digitado pelo usuário
      */
+    @Override
     public void acaoComando(String comando){
         
     }
     
-    /** Crie os ambientes fixos do jogo
+    /** Crie os ambientes fixos do jogo e retorna para criar o Model Jogo
      * 
      */
-    public void criarAmbientes(){
+    private ArrayList<Ambiente> criarAmbientes(){
         Ambiente escritorio, jantar, tv, jardim, cozinha, banheiro1, quarto1,
                 quarto2, quarto3, quarto4, banheiro2, corredor;
         
@@ -126,10 +138,20 @@ public class Controlador {
         
         banheiro2.ajustarSaidas("quarto3", quarto3);
         
-        
-        
-        
-        
-        
+        return new ArrayList<Ambiente>() {{ 
+            add(escritorio);
+            add(tv);
+            add(jantar);
+            add(jardim);
+            add(cozinha);
+            add(corredor);
+            add(quarto1);
+            add(quarto2);
+            add(quarto3);
+            add(quarto4);
+            add(banheiro1);
+            add(banheiro2);
+        }};
     }
+
 }
