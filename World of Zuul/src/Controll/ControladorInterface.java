@@ -5,12 +5,13 @@
  */
 package Controll;
 
+import Model.Util.AmbienteException;
+
 
 /** Interface para métodos da classe Controlador/JogoController
  *
  * @author alfarr
  */
 public interface ControladorInterface {
-    public abstract void jogar();
-    public abstract void acaoComando(String comando);  
+    public abstract void jogar() throws AmbienteException;
 }

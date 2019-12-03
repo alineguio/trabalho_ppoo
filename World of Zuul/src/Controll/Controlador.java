@@ -10,9 +10,12 @@ import Model.Util.AmbienteException;
 import Model.Util.Jogo;
 import View.TelaInicial;
 import View.TelaPrincipal;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 /**
  *
@@ -23,7 +26,7 @@ import javax.swing.JFrame;
  * 
  * @author alfarr
  */
-public class Controlador implements ControladorInterface{
+public class Controlador implements ControladorInterface,ActionListener{
     JFrame janelaPrincipal;
     TelaPrincipal tp;
     Jogo jogoModel;
@@ -36,7 +39,7 @@ public class Controlador implements ControladorInterface{
      * 
      * @throws AmbienteException - lugar de início não encontrado
      */
-    private Controlador() throws AmbienteException {
+    private Controlador() throws AmbienteException{
         tp = null;
         janelaPrincipal = new TelaInicial(this);
         janelaPrincipal.setVisible(true);
@@ -61,23 +64,14 @@ public class Controlador implements ControladorInterface{
      * 
      */
     @Override
-    public void jogar(){
-        tp = new TelaPrincipal(this);
+    public void jogar() throws AmbienteException{
+        tp = new TelaPrincipal();
         janelaPrincipal.dispose();
         janelaPrincipal = tp;
-        janelaPrincipal.setVisible(true);
-        
-        
+        janelaPrincipal.setVisible(true);        
     }
     
-    /** Método para tratar o comando passado via caixa de texto na GUI
-     * 
-     * @param comando - texto digitado pelo usuário
-     */
-    @Override
-    public void acaoComando(String comando){
-        
-    }
+    
     
     /** Crie os ambientes fixos do jogo e retorna para criar o Model Jogo
      * 
@@ -153,5 +147,16 @@ public class Controlador implements ControladorInterface{
             add(banheiro2);
         }};
     }
+    
+    /** Método para tratar o comando passado via caixa de texto na GUI
+     * 
+     * @param ae - Evento da ação
+     */
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        String comando = ((JTextField)ae.getSource()).getText();
+    }
+
+    
 
 }
