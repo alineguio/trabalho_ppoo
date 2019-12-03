@@ -61,7 +61,7 @@ public class TelaPrincipal extends JFrame{
         this.controlador = controlador;
         localAtual = "tv";
         localPosicao = new HashMap<>();
-        inicializarHasMap();
+        inicializarHashMap();
       
         
         gridLayoutCentro = new GridLayout(8, 11);
@@ -374,7 +374,7 @@ public class TelaPrincipal extends JFrame{
     
 
 
-    private void inicializarHasMap() {
+    private void inicializarHashMap() {
         int pos[] = new int[2];
         
         pos[0] = 1;
@@ -414,17 +414,17 @@ public class TelaPrincipal extends JFrame{
         pos = new int[2];
         pos[0] = 2;
         pos[1] = 8;
-        localPosicao.put("querto2", pos);
+        localPosicao.put("quarto2", pos);
         
         pos = new int[2];
         pos[0] = 3;
         pos[1] = 9;
-        localPosicao.put("querto3", pos);
+        localPosicao.put("quarto3", pos);
         
         pos = new int[2];
         pos[0] = 5;
         pos[1] = 8;
-        localPosicao.put("querto4", pos);
+        localPosicao.put("quarto4", pos);
         
         pos = new int[2];
         pos[0] = 5;

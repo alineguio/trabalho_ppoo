@@ -23,6 +23,7 @@ public class Controlador {
         janelaPrincipal = new TelaInicial(this);
         janelaPrincipal.setVisible(true);
     }
+    
     public void jogar(){
         tp = new TelaPrincipal(this);
         janelaPrincipal.dispose();
