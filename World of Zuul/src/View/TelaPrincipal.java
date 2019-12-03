@@ -5,8 +5,6 @@
  */
 package View;
 
-import Controll.Controlador;
-import Model.Util.AmbienteException;
 import Model.Util.ImagePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,8 +12,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -38,11 +34,12 @@ import javax.swing.border.LineBorder;
  *
  * @author leoam
  */
-public class TelaPrincipal extends JFrame{
+public class TelaPrincipal {
     private JPanel painelEsquerda;
     private JPanel painelDireita;
     private JPanel painelBaixo;
     private ImagePanel painelCentro;
+    private JFrame janela;
     private GridLayout gridLayoutCentro;
     private HashMap<String,int[]> localPosicao;
     private JTextField inpTentativasRestantes;
@@ -51,19 +48,14 @@ public class TelaPrincipal extends JFrame{
     private JTextArea inpInfos;
     private JTextField inpEntrada;
     private Clip musicaPrincipal;
-    private String localAtual;
-    private final Controlador controlador;
     
-    /** Método construror da Tela Principal do jogo
-     * @throws Model.Util.AmbienteException
-    */
-    public TelaPrincipal() throws AmbienteException {
-        super("Jogo!");
-        this.controlador = Controlador.getInstance();
-        localAtual = "tv";
+    
+    public TelaPrincipal() {
         localPosicao = new HashMap<>();
-        inicializarHashMap();
-      
+        inicializarHasMap();
+        
+        
+        janela = new JFrame("Jogo!");
         
         gridLayoutCentro = new GridLayout(8, 11);
         
@@ -73,77 +65,28 @@ public class TelaPrincipal extends JFrame{
         montarPainelBaixo();
         montarPainelCentro();
         montarJanela();
-        tocarMusica("musica.wav");
+        tocarMusica();
     }
     
-    /** Seta o JTextField de "tentativas restantes" de acordo com o parâmetro. 
-    * @param numero - Novo número de tentativas restantes
-    */
-    
-    public void setTentativasRestantes(int numero){
-        inpTentativasRestantes.setText(String.valueOf(numero));
-    }
-    
-    /** Seta a durabilidade da chave mestra de acordo com o parâmetro
-    * @param numero - Nova durabilidade da chave mestra
-    */
-    public void setDurabilidadeChave(int numero){
-        inpDurabilidadeChaveMestra.setText(String.valueOf(numero));
-    }
-    
-    /** Seta o texto de dicas (apaga o conteúdo anterior e escreve segundo o parâmetro)
-    * @param dicas - Novas dicas que serão exibidas para o usuário
-    */
-    public void setDicas(String dicas){
-        inpDicas.setText(dicas);
-    }
-    
-    /** Acrescenta uma nova dica (NÃO apaga o conteúdo anterior, apenas concatena)
-    * @param dica - Texto da nova dica que deve ser concatenada
-    */
-    public void acrescentaDica(String dica){
-        inpDicas.setText(inpDicas.getText() +"\n" +dica);
-    }
-    
-    /** Seta o texto de informações (caixa de texto logo acima da entrada do usuário)
-    * @param texto - Texto que deve ser exibidio na caixa "Informações"
-    */
-    public void setInfos(String texto){
-        inpInfos.setText(texto);
-    }
-    
-    
-    /** Método para terminar o jogo
-    * @param vitoria - Define se o usuário plantou a bomba no local certo (portanto venceu o jogo) ou não
-    */
-    public void plantarBomba(boolean vitoria){
-        escurecerCenario();
-        esperarSegundos(2);
-        musicaPrincipal.stop();
-        tocaEfeitosSonoros("suspense.wav");
-        esperarSegundos(12);
-        tocaEfeitosSonoros("explosao.wav");
-        esperarSegundos(2);
-        if(vitoria){
-            vitoriaFinal();
-            tocaEfeitosSonoros("sucesso.wav");
-            tocarMusica("vitoria.wav");
-        }else{
-            esperarSegundos(2);
-            tocaEfeitosSonoros("errou.wav");
-        }
-    }
-    
-    private void tocarMusica(String caminho){
+    private void tocarMusica(){
         try{
-            URL som = getClass().getClassLoader().getResource("assets/sounds/"+caminho);
+            
+            
+            URL som = getClass().getClassLoader().getResource("assets/sounds/musica.wav");
+            
             AudioInputStream audioInputStream =  AudioSystem.getAudioInputStream(som); 
+            
+            // create clip reference 
             musicaPrincipal = AudioSystem.getClip(); 
+
+            // open audioInputStream to the clip 
             musicaPrincipal.open(audioInputStream); 
+
             musicaPrincipal.loop(Clip.LOOP_CONTINUOUSLY);
             musicaPrincipal.start();
+            //System.out.println(caminho);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(this,"Erro ao reproduzir som: "+e.getMessage());
+            JOptionPane.showMessageDialog(janela, e.getMessage());
         }
     }
     
@@ -151,56 +94,46 @@ public class TelaPrincipal extends JFrame{
         try{
             URL som = getClass().getClassLoader().getResource("assets/sounds/"+nomeMusica);       
             AudioInputStream audioInputStream =  AudioSystem.getAudioInputStream(som); 
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.loop(0);
+            Clip clip = AudioSystem.getClip(); 
+            clip.open(audioInputStream); 
+
             clip.start();
-            
         }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Não foi possível reproduzir um som: "+nomeMusica );
+            JOptionPane.showMessageDialog(janela, "Não foi possível reproduzir um som: "+nomeMusica );
         }
     }
     
-    private void esperarSegundos(int tempo){
-        try{
-            TimeUnit.SECONDS.sleep(tempo);
-        }catch(Exception e){
-            System.err.println("Erro ao esperar "+tempo+" segundos.");
-        }
-    }
-    
-    /** Muda o personagem para o local passado por parâmetro 
-    * @param novoAmbiente - Novas dicas que serão exibidas para o usuário (Opções váidas: [escritorio,jantar,tv,jardim,cozinha,banheiro1,quarto1,quarto2,quarto3,quarto4,banheiro2])
-    */
     public void abrirPorta(String novoAmbiente){
-        escurecerCenario();
-        esperarSegundos(1);
-        tocaEfeitosSonoros("abrindo_porta.wav");
-        esperarSegundos(2);
-        posicionaPersonagem(novoAmbiente);
+        try{
+            escurecerCenario();
+            painelCentro.revalidate();
+            painelCentro.repaint();
+            TimeUnit.SECONDS.sleep(1);
+            tocaEfeitosSonoros("abrindo_porta.wav");
+            TimeUnit.SECONDS.sleep(2);
+            posicionaPersonagem(novoAmbiente);
+            painelCentro.revalidate();
+            painelCentro.repaint();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(janela, "ERRO!");
+        }
+        
     }
-    /** Personagem tentou mudar de ambiente porém sem sucesso 
-    */
-    public void portaTrancada(){
-        escurecerCenario();
-        esperarSegundos(1);
-        tocaEfeitosSonoros("porta_fechada.wav");
-        esperarSegundos(2);
-        posicionaPersonagem(localAtual);
-    }
+    
+    
     
     private void montarJanela(){
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //this.setResizable(false);
-        this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janela.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        janela.setResizable(false);
+        janela.setLayout(new BorderLayout());
+        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        this.add(painelBaixo,BorderLayout.SOUTH);
-        this.add(painelEsquerda,BorderLayout.WEST);
-        this.add(painelCentro,BorderLayout.CENTER);
-        this.add(painelDireita,BorderLayout.EAST);
+        janela.add(painelBaixo,BorderLayout.SOUTH);
+        janela.add(painelEsquerda,BorderLayout.WEST);
+        janela.add(painelCentro,BorderLayout.CENTER);
+        janela.add(painelDireita,BorderLayout.EAST);
         
-        //this.pack();
+        //janela.pack();
     }
 
     private void montarPainelEsq() {
@@ -246,7 +179,7 @@ public class TelaPrincipal extends JFrame{
         
         inpDicas = new JTextArea();
         inpDicas.setBackground(new Color(0,0,0,0));
-        inpDicas.setText("");
+        inpDicas.setText("teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste ");
         inpDicas.setLineWrap(true);
         inpDicas.setWrapStyleWord(true);
         inpDicas.setFont(new Font(Font.DIALOG,Font.BOLD,15));
@@ -270,10 +203,6 @@ public class TelaPrincipal extends JFrame{
         
         inpEntrada = new JTextField();
         inpEntrada.setFont(new Font(Font.DIALOG_INPUT,Font.ITALIC,16));
-        inpEntrada.addActionListener(
-                controlador
-        );
-        
         painelBaixo.add(inpEntrada);
         
     }
@@ -287,7 +216,7 @@ public class TelaPrincipal extends JFrame{
         painelCentro = new ImagePanel(img);
         painelCentro.setLayout(gridLayoutCentro);
 
-        posicionaPersonagem(localAtual);
+        posicionaPersonagem("tv");
         
         
     }
@@ -312,64 +241,26 @@ public class TelaPrincipal extends JFrame{
                 }else{
                     JLabel rotulo = new JLabel("");
                     rotulo.setOpaque(true);
+                    
                     int opacidade;
                     int conta = Math.abs(i - posI) + Math.abs(j - posJ) - 2;
-                    opacidade = Math.abs(conta * 80);
+                    opacidade = Math.abs(conta * 30);
                     if(opacidade > 255) opacidade= 255;
+                    
+                    
                     Color escuro = new Color(0,0,0,opacidade);
                     rotulo.setBackground(escuro);
                     painelCentro.add(rotulo);
                 }
             }
         }
-        localAtual = local;
-        painelCentro.revalidate();
-        painelCentro.repaint();
-    } 
-    private void vitoriaFinal(){
-        
-        painelCentro.removeAll();
-        int posI = localPosicao.get(localAtual)[0];
-        int posJ = localPosicao.get(localAtual)[1];
-        
-        
-        
-        for(int i=0;i<gridLayoutCentro.getRows();i++){
-            for(int j=0;j<gridLayoutCentro.getColumns();j++){
-                if(i==posI && posJ == j){
-
-                    JLabel rotulo = new JLabel("");
-                    ImageIcon imgPersonagem = new ImageIcon( (new ImageIcon(getClass().getClassLoader().getResource("assets/img/diamanteMexe.gif")))
-                            .getImage()
-                            .getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-
-                    rotulo.setIcon(imgPersonagem);
-                    rotulo.setHorizontalAlignment(JLabel.CENTER);
-                    rotulo.setVerticalAlignment(JLabel.CENTER);
-                    painelCentro.add(rotulo );
-                }else if(i == posI + 1  && posJ == j){
-                    JLabel rotulo = new JLabel("");
-                    ImageIcon imgPersonagem = new ImageIcon( (new ImageIcon(getClass().getClassLoader().getResource("assets/img/pMexe.gif")))
-                            .getImage()
-                            .getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-
-                    rotulo.setIcon(imgPersonagem);
-                    rotulo.setHorizontalAlignment(JLabel.CENTER);
-                    rotulo.setVerticalAlignment(JLabel.CENTER);
-                    painelCentro.add(rotulo );
-                }else{
-                    JLabel rotulo = new JLabel("");
-                    painelCentro.add(rotulo);
-                }
-            }
-        }
-        painelCentro.revalidate();
-        painelCentro.repaint();
     } 
     
+    public void exibir(){
+        janela.setVisible(true);
+    }
 
-
-    private void inicializarHashMap() {
+    private void inicializarHasMap() {
         int pos[] = new int[2];
         
         pos[0] = 1;
@@ -409,27 +300,23 @@ public class TelaPrincipal extends JFrame{
         pos = new int[2];
         pos[0] = 2;
         pos[1] = 8;
-        localPosicao.put("quarto2", pos);
+        localPosicao.put("querto2", pos);
         
         pos = new int[2];
         pos[0] = 3;
         pos[1] = 9;
-        localPosicao.put("quarto3", pos);
+        localPosicao.put("querto3", pos);
         
         pos = new int[2];
         pos[0] = 5;
         pos[1] = 8;
-        localPosicao.put("quarto4", pos);
+        localPosicao.put("querto4", pos);
         
         pos = new int[2];
         pos[0] = 5;
         pos[1] = 9;
         localPosicao.put("banheiro2", pos);
         
-        pos = new int[2];
-        pos[0] = 3;
-        pos[1] = 6;
-        localPosicao.put("corredor", pos);
         
     }
 
@@ -444,8 +331,6 @@ public class TelaPrincipal extends JFrame{
                 painelCentro.add(rotulo);
             }
         }
-        painelCentro.revalidate();
-        painelCentro.repaint();
     }
     
     
