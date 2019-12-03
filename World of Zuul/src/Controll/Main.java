@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main{
     public static void main(String[] args) throws Exception{
-        Controlador c = new Controlador();
-        
+        Controlador c = Controlador.getInstance();
+        c.acaoComando("quarto2");
     }
     
 }

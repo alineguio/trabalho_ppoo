@@ -6,6 +6,7 @@
 package View;
 
 import Controll.Controlador;
+import Model.Util.AmbienteException;
 import Model.Util.ImagePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,17 +52,17 @@ public class TelaPrincipal extends JFrame{
     private JTextField inpEntrada;
     private Clip musicaPrincipal;
     private String localAtual;
-    private Controlador controlador;
+    private final Controlador controlador;
     
     /** Método construror da Tela Principal do jogo
-    * @param controlador - Controlador que receberá os comandos do usuário
+     * @throws Model.Util.AmbienteException
     */
-    public TelaPrincipal(Controlador controlador) {
+    public TelaPrincipal() throws AmbienteException {
         super("Jogo!");
-        this.controlador = controlador;
+        this.controlador = Controlador.getInstance();
         localAtual = "tv";
         localPosicao = new HashMap<>();
-        inicializarHasMap();
+        inicializarHashMap();
       
         
         gridLayoutCentro = new GridLayout(8, 11);
@@ -270,13 +271,7 @@ public class TelaPrincipal extends JFrame{
         inpEntrada = new JTextField();
         inpEntrada.setFont(new Font(Font.DIALOG_INPUT,Font.ITALIC,16));
         inpEntrada.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        controlador.acaoComando(inpEntrada.getText());
-                        inpEntrada.setText("");
-                    }
-                }
+                controlador
         );
         
         painelBaixo.add(inpEntrada);
@@ -374,7 +369,7 @@ public class TelaPrincipal extends JFrame{
     
 
 
-    private void inicializarHasMap() {
+    private void inicializarHashMap() {
         int pos[] = new int[2];
         
         pos[0] = 1;
@@ -414,23 +409,27 @@ public class TelaPrincipal extends JFrame{
         pos = new int[2];
         pos[0] = 2;
         pos[1] = 8;
-        localPosicao.put("querto2", pos);
+        localPosicao.put("quarto2", pos);
         
         pos = new int[2];
         pos[0] = 3;
         pos[1] = 9;
-        localPosicao.put("querto3", pos);
+        localPosicao.put("quarto3", pos);
         
         pos = new int[2];
         pos[0] = 5;
         pos[1] = 8;
-        localPosicao.put("querto4", pos);
+        localPosicao.put("quarto4", pos);
         
         pos = new int[2];
         pos[0] = 5;
         pos[1] = 9;
         localPosicao.put("banheiro2", pos);
         
+        pos = new int[2];
+        pos[0] = 3;
+        pos[1] = 6;
+        localPosicao.put("corredor", pos);
         
     }
 
