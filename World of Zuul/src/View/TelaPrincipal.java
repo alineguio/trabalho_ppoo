@@ -6,6 +6,7 @@
 package View;
 
 import Controll.Controlador;
+import Model.Util.AmbienteException;
 import Model.Util.ImagePanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,14 +52,14 @@ public class TelaPrincipal extends JFrame{
     private JTextField inpEntrada;
     private Clip musicaPrincipal;
     private String localAtual;
-    private Controlador controlador;
+    private final Controlador controlador;
     
     /** Método construror da Tela Principal do jogo
-    * @param controlador - Controlador que receberá os comandos do usuário
+     * @throws Model.Util.AmbienteException
     */
-    public TelaPrincipal(Controlador controlador) {
+    public TelaPrincipal() throws AmbienteException {
         super("Jogo!");
-        this.controlador = controlador;
+        this.controlador = Controlador.getInstance();
         localAtual = "tv";
         localPosicao = new HashMap<>();
         inicializarHashMap();
@@ -270,13 +271,7 @@ public class TelaPrincipal extends JFrame{
         inpEntrada = new JTextField();
         inpEntrada.setFont(new Font(Font.DIALOG_INPUT,Font.ITALIC,16));
         inpEntrada.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        controlador.acaoComando(inpEntrada.getText());
-                        inpEntrada.setText("");
-                    }
-                }
+                controlador
         );
         
         painelBaixo.add(inpEntrada);

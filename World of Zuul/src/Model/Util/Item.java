@@ -34,9 +34,11 @@ public abstract class Item {
     
     /** Poliformismo: subclasse executa uma ação
      * 
-     * @throws Exception 
+     * @return 
+     * @throws Model.Util.ItemException
+     * @throws Model.Util.GameOverException
      */
-    public abstract void fazerAcao() throws Exception;
+    public abstract String fazerAcao() throws ItemException, GameOverException;
     
     
 }

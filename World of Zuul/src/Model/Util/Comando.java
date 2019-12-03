@@ -48,7 +48,7 @@ public class Comando {
         return segundaPalavra;
     }
     
-    /** Retorna booleano - true se o comando estive vazio, false se não estiver
+    /** Retorna booleano - true se o comando estiver vazio, false se não estiver
      * 
      * @return boolean que verifica se o comando esta vazio 
      */

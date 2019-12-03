@@ -7,12 +7,19 @@ package Controll;
 
 import Model.Util.Ambiente;
 import Model.Util.AmbienteException;
+import Model.Util.Analisador;
+import Model.Util.Comando;
+import Model.Util.GameOverException;
+import Model.Util.ItemException;
+import Model.Util.JogadorException;
 import Model.Util.Jogo;
 import View.TelaInicial;
 import View.TelaPrincipal;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 /**
  *
@@ -23,25 +30,26 @@ import javax.swing.JFrame;
  * 
  * @author alfarr
  */
-public class Controlador implements ControladorInterface{
-    JFrame janelaPrincipal;
-    TelaPrincipal tp;
-    Jogo jogoModel;
-    private static final Controlador instance = null;
+public class Controlador implements ControladorInterface,ActionListener{
+    private JFrame janelaPrincipal;
+    private TelaPrincipal tp;
+    private Jogo jogoModel;
+    private static Controlador instance = null;
     private final JogadorController jogadorController;
-    private Random random;
+    private final Analisador analisador;
+
     
-    
-    /** Construtor da GUI, do core do jogo e do 
+    /** Construtor da GUI, do core do jogo, do Controlador da classe Jogador e do Analisador
      * 
      * @throws AmbienteException - lugar de início não encontrado
      */
-    private Controlador() throws AmbienteException {
+    private Controlador() throws AmbienteException{
         tp = null;
         janelaPrincipal = new TelaInicial(this);
         janelaPrincipal.setVisible(true);
         jogoModel = Jogo.getInstance(null, criarAmbientes());
-        jogadorController = JogadorController.getInstance(jogoModel.getAmbiente("tv"));        
+        jogadorController = JogadorController.getInstance(jogoModel.getAmbiente("tv"));     
+        analisador = Analisador.getInstance();
     }
     
     /** Construtor Singleton
@@ -50,34 +58,26 @@ public class Controlador implements ControladorInterface{
      * @throws Model.Util.AmbienteException - lugar de início não encontrado
      */
     public static Controlador getInstance() throws AmbienteException{
-        if (instance != null){
-            return instance;
+        if (instance == null){
+            instance = new Controlador();
         }
         
-        return new Controlador();
+        return instance;
     }
     
     /** Método que inicializa o jogo e desenha a tela
      * 
+     * @throws Model.Util.AmbienteException
      */
     @Override
-    public void jogar(){
-        tp = new TelaPrincipal(this);
+    public void jogar() throws AmbienteException{
+        tp = new TelaPrincipal();
         janelaPrincipal.dispose();
         janelaPrincipal = tp;
-        janelaPrincipal.setVisible(true);
-        
-        
+        janelaPrincipal.setVisible(true);        
     }
     
-    /** Método para tratar o comando passado via caixa de texto na GUI
-     * 
-     * @param comando - texto digitado pelo usuário
-     */
-    @Override
-    public void acaoComando(String comando){
-        
-    }
+    
     
     /** Crie os ambientes fixos do jogo e retorna para criar o Model Jogo
      * 
@@ -153,5 +153,45 @@ public class Controlador implements ControladorInterface{
             add(banheiro2);
         }};
     }
+    
+    /** Método para tratar o comando passado via caixa de texto na GUI
+     * 
+     * @param ae - Evento da ação
+     */
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        String comando = ((JTextField)ae.getSource()).getText();
+        
+        Comando cmd = analisador.pegaComando(comando);
+        try {
+            switch(cmd.getPalavraComando()){
+            case "sair":
+                jogadorController.sair();
+                break;
+            case "ir":
+                if (jogadorController.abrirPorta(cmd.getSegundaPalavra())){
+                    tp.abrirPorta(cmd.getSegundaPalavra());
+                } else {
+                    tp.portaTrancada();
+                }
+                break;
+            case "chave":
+                jogadorController.usarItem(null); // Arrumar com código da Aline!
+                break;
+            default:
+                break;
+        }
+        } catch (JogadorException | ItemException ex) {
+            System.out.println("Erro em Controlador: " + ex.getMessage());
+        } catch (GameOverException ex) {
+            if(ex.getMessage().equals("vitoria")){
+                tp.plantarBomba(true);
+            } else {
+                tp.plantarBomba(false);
+            }
+        }
+    }
+
+    
 
 }

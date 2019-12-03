@@ -12,7 +12,7 @@ package Model.Util;
  */
 public class ChaveMestra extends Item{
     private int usos;
-    private static final ChaveMestra instance = null;
+    private static ChaveMestra instance = null;
     
     /**Construtor da chave mestra 
      * 
@@ -31,11 +31,11 @@ public class ChaveMestra extends Item{
      * @return - Objeto da classe ChaveMestra
     */
     public static ChaveMestra getInstance(Ambiente ambiente, int usos){
-        if (instance != null){
-            return instance;
+        if (instance == null){
+            return instance = new ChaveMestra(ambiente, usos);
         }
         
-        return new ChaveMestra(ambiente, usos);
+        return instance;
     }
     
     /** Método para decrementar a quantidade de vezes que a chave mestra ainda pode ser utilizada
@@ -43,11 +43,18 @@ public class ChaveMestra extends Item{
      * @throws ItemException 
      */
     @Override
-    public void fazerAcao() throws ItemException{
+    public String fazerAcao() throws ItemException{
         if(usos > 0){
             usos--;
         } else {
             throw new ItemException("Chave mestra quebrou!");
         }
+<<<<<<< HEAD
     }    
+=======
+        
+        return Integer.toString(usos);
+    }
+    
+>>>>>>> a33caf71e333f0499ba309706e06496d1f7bea72
 }

@@ -13,7 +13,7 @@ import java.util.List;
  * @author alfarr
  */
 public class PalavrasComando {
-    private static final PalavrasComando instance = null;
+    private static PalavrasComando instance = null;
     private static List<String> comandosValidos;
     
     /** Construtor dos comandos estáticos do jogo    
@@ -34,10 +34,10 @@ public class PalavrasComando {
      */
     public static PalavrasComando getInstance(){
         if(instance != null){
-            return instance;
+           instance = new PalavrasComando();
         }
         
-        return new PalavrasComando();
+        return instance;
     }
     
     /** Retorna concatencação, separados por espaço, de cada comando disponível
