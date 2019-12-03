@@ -14,8 +14,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main{
     public static void main(String[] args) throws Exception{
-        Controlador c = Controlador.getInstance();
-        c.acaoComando("quarto2");
+        TelaPrincipal tp = new TelaPrincipal();
+        tp.exibir();
+        TimeUnit.SECONDS.sleep(5);
+        tp.abrirPorta("escritorio");
     }
-    
 }
