@@ -44,6 +44,14 @@ public class Tesouro extends Item{
         return encontrado;
     }
 
+    /**  Retorna o ambiete em que o tesouro do jogo está
+     * 
+     * @return ambiente em que o tesouro está
+     */
+    public Ambiente getAmbiente() {
+        return ambiente;
+    }
+    
      /** Define o estado do tesouro
       * 
       * @param encontrado - verdadeiro ou falso, encontrado ou não
@@ -66,6 +74,4 @@ public class Tesouro extends Item{
         }
             
     }
-    
-    
 }

@@ -49,8 +49,5 @@ public class ChaveMestra extends Item{
         } else {
             throw new ItemException("Chave mestra quebrou!");
         }
-        
-        
-    }
-    
+    }    
 }

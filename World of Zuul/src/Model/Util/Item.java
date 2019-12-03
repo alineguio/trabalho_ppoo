@@ -14,7 +14,7 @@ package Model.Util;
     Classe pai dos itens do jogo: Dica, Tesouro e Chave Mestra 
 */
 public abstract class Item {
-    private final Ambiente ambiente;
+    final Ambiente ambiente;
     
     /** Construtor com o ambiente que o item está
         

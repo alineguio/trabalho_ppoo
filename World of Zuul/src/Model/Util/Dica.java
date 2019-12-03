@@ -12,15 +12,30 @@ package Model.Util;
 public class Dica extends Item{
     
     private String texto;
+    private static final Dica instance = null;
     
     /**Construtor da dica
      * 
      * @param ambiente - ambiente em que a dica se encontra
      * @param texto - string que contem a dica
      */
-    public Dica(Ambiente ambiente, String texto) {
+    private Dica(Ambiente ambiente, String texto) {
         super(ambiente);
         this.texto = texto;
+    }
+    
+    /** Construtor Singleton
+     * 
+     * @param ambiente - ambiente em que a dica se encontra
+     * @param texto - string que contem a dica
+     * @return - Objeto da classe Dica
+    */
+    public static Dica getInstance(Ambiente ambiente, String texto){
+        if (instance != null){
+            return instance;
+        }
+        
+        return new Dica(ambiente, texto);
     }
     
     /** Retorna a dica
@@ -38,8 +53,5 @@ public class Dica extends Item{
     @Override
     public void fazerAcao() throws ItemException {
         System.out.println(texto);
-    }
-    
-    
-       
+    }  
 }

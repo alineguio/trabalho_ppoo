@@ -46,12 +46,20 @@ public class Ambiente {
         return descricao;
     }
 
-    /** Retorna a descrição do ambiente
+    /** Retorna a ambiente de acordo com o nome 
      * 
      * @return objeto ambiente que esta mapeado na Hash Map saidas
      */
     public Ambiente getAmbiente(String nome) {
         return saidas.get(nome);
+    }
+    
+    /** Retorna os ambientes adjacentes ao ambiente atual
+     * 
+     * @return objeto ambiente que esta mapeado na Hash Map saidas
+     */
+    public HashMap<String, Ambiente> getSaidas() {
+        return saidas;
     }
     
     /** Retorna uma string com todas as saídas do ambiente concatenadas e separadas por um espaço
@@ -67,5 +75,4 @@ public class Ambiente {
         
         return rStr;
     }
-    
 }
