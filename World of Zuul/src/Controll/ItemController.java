@@ -27,8 +27,7 @@ public class ItemController implements ItemInterface {
     @Override
     public ChaveMestra gerarChaveMestra(ArrayList<Ambiente> ambientes) {
         Random r = new Random();
-        int usos = r.nextInt(13);
-        ChaveMestra chave = ChaveMestra.getInstance(sorteioAmbiente(ambientes), usos);
+        ChaveMestra chave = ChaveMestra.getInstance(sorteioAmbiente(ambientes), r.nextInt(13));
         
         return chave;
     }
@@ -44,29 +43,37 @@ public class ItemController implements ItemInterface {
         Random r = new Random();
         
         Ambiente ambienteDica;
+        Ambiente ambienteAleatorio;
         HashMap<String, Ambiente> ambientesPertoTesouro;
-        ArrayList<Ambiente> copia = ambientes;
+        
+        ArrayList<Ambiente> ambienteComItem = new ArrayList<>(); // ambientes que possuem itens já
+        ArrayList<Ambiente> ambienteNaDica = new ArrayList<>(); // ambientes que já estão em dicas
+        
         Ambiente ambienteTesouro;  // ambiente que será colocado na dica sobre o tesouro
         
-        copia.remove(tesouro.getAmbiente());
+        ambienteComItem.add(tesouro.getAmbiente());
+        ambienteNaDica.add(tesouro.getAmbiente()); // evita que no while precise de verificação de igualdade do ambiente do tesouro com os dois ambientes 
         
         for (int i = 0; i < 3; i++){
+            ambienteDica = sorteioAmbienteEspecifico(ambientes, ambienteComItem);
+            ambienteTesouro = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
             
-            ambienteDica = sorteioAmbiente(ambientes);
-            ambientes.remove(ambienteDica); 
+            while (ambienteDica.equals(ambienteTesouro)){
+                ambienteTesouro = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
+            }
             
-            ambienteTesouro = sorteioAmbiente(copia);
-            copia.remove(ambienteTesouro);
+            ambienteComItem.add(ambienteDica);
+            ambienteNaDica.add(ambienteTesouro);
             
             dicas.add(Dica.getInstance(ambienteDica, "O tesouro não está no(a) " + ambienteTesouro.getDescricao()));
         }
+        ambienteDica = sorteioAmbienteEspecifico(ambientes, ambienteComItem);
+        ambienteComItem.add(ambienteDica);
         
-        ambienteDica = sorteioAmbiente(ambientes);
-        ambientes.remove(ambienteDica); 
+        ambientesPertoTesouro = (tesouro.getAmbiente()).getSaidas(); // pega as saídas do ambiente
+        ambienteAleatorio = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
+        ambienteTesouro = ambientesPertoTesouro.get(ambienteAleatorio.getDescricao()); 
         
-        ambientesPertoTesouro = (tesouro.getAmbiente()).getSaidas();
-        ambienteTesouro = ambientesPertoTesouro.get(r.nextInt(ambientes.size()));
-
         dicas.add(Dica.getInstance(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
            
         return dicas;
@@ -101,4 +108,12 @@ public class ItemController implements ItemInterface {
         return ambiente;
     }
     
+    private Ambiente sorteioAmbienteEspecifico(ArrayList<Ambiente> ambientes, ArrayList<Ambiente> listaComparativa){
+        Ambiente ambiente = sorteioAmbiente(ambientes);
+        while(listaComparativa.contains(ambiente)){ // se já existir no array list, continuar fazendo sorteio até não conter mais
+            ambiente = sorteioAmbiente(ambientes);
+        }
+        
+        return ambiente;
+    }
 }
