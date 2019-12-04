@@ -1,5 +1,6 @@
-Tesouro está no ambiente escritorio
-Chave Mestra está no ambiente quarto2
+
+Tesouro está no ambiente quarto4
+Chave Mestra está no ambiente quarto1
 As dicas do jogo são: 
- -> O tesouro não está no(a) quarto1
- -> O tesouro não está no(a) quarto2
+ -> O tesouro não está no(a) banheiro1
+ -> O tesouro não está no(a) jardim

@@ -14,21 +14,23 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 
@@ -36,13 +38,13 @@ import javax.swing.border.LineBorder;
  *
  * @author leoam
  */
-public class TelaPrincipal extends JFrame{
+public class TelaPrincipal extends JPanel{
     private JPanel painelEsquerda;
     private JPanel painelDireita;
     private JPanel painelBaixo;
-    private ImagePanel painelCentro;
-    private GridLayout gridLayoutCentro;
-    private HashMap<String,int[]> localPosicao;
+    private JPanel painelCentro;
+    private final GridLayout gridLayoutCentro;
+    private final HashMap<String,int[]> localPosicao;
     private JTextField inpTentativasRestantes;
     private JTextField inpDurabilidadeChaveMestra;
     private JTextArea inpDicas;
@@ -56,7 +58,7 @@ public class TelaPrincipal extends JFrame{
      * @throws Model.Util.AmbienteException
     */
     public TelaPrincipal() throws AmbienteException {
-        super("Jogo!");
+        
         this.controlador = Controlador.getInstance();
         localAtual = "tv";
         localPosicao = new HashMap<>();
@@ -115,21 +117,32 @@ public class TelaPrincipal extends JFrame{
     * @param vitoria - Define se o usuário plantou a bomba no local certo (portanto venceu o jogo) ou não
     */
     public void plantarBomba(boolean vitoria){
+        int tempo = 1;
         escurecerCenario();
-        esperarSegundos(2);
-        musicaPrincipal.stop();
-        tocaEfeitosSonoros("suspense.wav");
-        esperarSegundos(12);
-        tocaEfeitosSonoros("explosao.wav");
-        esperarSegundos(2);
-        if(vitoria){
-            vitoriaFinal();
-            tocaEfeitosSonoros("sucesso.wav");
-            tocarMusica("vitoria.wav");
-        }else{
-            esperarSegundos(2);
-            tocaEfeitosSonoros("errou.wav");
-        }
+        esperarSegundos(tempo,(ActionEvent) -> {
+            musicaPrincipal.stop();
+            tocaEfeitosSonoros("suspense.wav");
+        });
+        
+        tempo += 12;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("explosao.wav");
+        });
+        
+        tempo += 2;
+        esperarSegundos(tempo, (ActionEvent) -> {
+            if(vitoria){
+                vitoriaFinal();
+                tocaEfeitosSonoros("sucesso.wav");
+                tocarMusica("vitoria.wav");
+                exibirAlerta("Fim de jogo! Você venceu!");
+            }else{
+                tocaEfeitosSonoros("errou.wav");
+                exibirAlerta("Fim de jogo! Você perdeu :( !");
+            }
+        });
+        
+        
     }
     
     private void tocarMusica(String caminho){
@@ -159,12 +172,20 @@ public class TelaPrincipal extends JFrame{
         }
     }
     
-    private void esperarSegundos(int tempo){
+    private void esperarSegundos(int tempo,ActionListener taskPerformer){
         try{
-            TimeUnit.SECONDS.sleep(tempo);
+            tempo *= 1000;
+            Timer t = new Timer(tempo, taskPerformer);
+            t.setRepeats(false);
+            t.start();
         }catch(Exception e){
             System.err.println("Erro ao esperar "+tempo+" segundos.");
         }
+    }
+    
+    
+    public void exibirAlerta(String info){
+        JOptionPane.showMessageDialog(this.getParent(), info);
     }
     
     /** Muda o personagem para o local passado por parâmetro 
@@ -174,48 +195,62 @@ public class TelaPrincipal extends JFrame{
         if(!localPosicao.containsKey(novoAmbiente))
             throw new AmbienteException("Esse ambiente não existe!");
         
-        //escurecerCenario();
-        //esperarSegundos(1);
-        //tocaEfeitosSonoros("abrindo_porta.wav");
-        //esperarSegundos(2);
-        posicionaPersonagem(novoAmbiente);
+        escurecerCenario();
+        int tempo = 1;
+        
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("abrindo_porta.wav");
+        });
+        
+        tempo += 2;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            posicionaPersonagem(novoAmbiente);
+        });
         
     }
     /** Personagem tentou mudar de ambiente porém sem sucesso 
     */
     public void portaTrancada(){
-        //escurecerCenario();
-        //esperarSegundos(1);
-        //tocaEfeitosSonoros("porta_fechada.wav");
-        //esperarSegundos(2);
-        //posicionaPersonagem(localAtual);
+        escurecerCenario();
+        int tempo = 1;
+        
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("porta_fechada.wav");
+        });
+        
+        tempo += 1;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            posicionaPersonagem(localAtual);
+        });
     }
     
     private void montarJanela(){
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //this.setResizable(false);
         this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         
         this.add(painelBaixo,BorderLayout.SOUTH);
         this.add(painelEsquerda,BorderLayout.WEST);
         this.add(painelCentro,BorderLayout.CENTER);
         this.add(painelDireita,BorderLayout.EAST);
-        
-        //this.pack();
+
     }
 
     private void montarPainelEsq() {
         painelEsquerda = new JPanel();
+        painelEsquerda.setBackground(Color.BLACK);
         
         painelEsquerda.setLayout(new BoxLayout(painelEsquerda, BoxLayout.Y_AXIS));
         
         JLabel rotulo = new JLabel("<html>Número de tentativas restantes:</html>");
+        
         rotulo.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+        rotulo.setForeground(Color.WHITE);
         rotulo.setPreferredSize(new Dimension(50,100));
         painelEsquerda.add(rotulo);
         
         inpTentativasRestantes = new JTextField("0");
+        inpTentativasRestantes.setBackground(Color.black);
+        inpTentativasRestantes.setForeground(Color.white);
         inpTentativasRestantes.setEditable(false);
         inpTentativasRestantes.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
         inpTentativasRestantes.setMaximumSize(new Dimension(100,50));
@@ -226,9 +261,12 @@ public class TelaPrincipal extends JFrame{
         rotulo = new JLabel("<html>Durabilidade da chave mestra:</html>");
         rotulo.setPreferredSize(new Dimension(200,100));
         rotulo.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+        rotulo.setForeground(Color.white);
         painelEsquerda.add(rotulo);
         
         inpDurabilidadeChaveMestra = new JTextField("0");
+        inpDurabilidadeChaveMestra.setBackground(Color.black);
+        inpDurabilidadeChaveMestra.setForeground(Color.white);
         inpDurabilidadeChaveMestra.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
         inpDurabilidadeChaveMestra.setEditable(false);
         inpDurabilidadeChaveMestra.setMaximumSize(new Dimension(100,50));
@@ -239,15 +277,18 @@ public class TelaPrincipal extends JFrame{
 
     private void montarPainelDir() {
         painelDireita = new JPanel();
+        painelDireita.setBackground(Color.black);
         painelDireita.setLayout(new BoxLayout(painelDireita, BoxLayout.Y_AXIS));
-        /* LABEL TESTE! */
         JLabel rotulo = new JLabel("<html>Dicas encontradas:</html>");
+        rotulo.setForeground(Color.white);
         rotulo.setPreferredSize(new Dimension(200,100));
         rotulo.setFont(new Font(Font.DIALOG,Font.BOLD,20));
         painelDireita.add(rotulo);
         
         inpDicas = new JTextArea();
-        inpDicas.setBackground(new Color(0,0,0,0));
+        inpDicas.setBackground(Color.black);
+        inpDicas.setForeground(Color.white);
+        inpDicas.setBorder(BorderFactory.createEmptyBorder());
         inpDicas.setText("");
         inpDicas.setLineWrap(true);
         inpDicas.setWrapStyleWord(true);
@@ -255,20 +296,33 @@ public class TelaPrincipal extends JFrame{
         inpDicas.setEditable(false);
         inpDicas.setColumns(1);
         JScrollPane scrollPane = new JScrollPane(inpDicas);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         painelDireita.add(scrollPane);
         
     }
 
     private void montarPainelBaixo() {
         painelBaixo = new JPanel();
+        
+
         painelBaixo.setLayout(new BoxLayout(painelBaixo, BoxLayout.Y_AXIS));
         
         inpInfos = new JTextArea();
+        inpInfos.setBackground(Color.black);
+        inpInfos.setForeground(Color.white);
         inpInfos.setFont(new Font(Font.DIALOG,Font.ITALIC,16));
-        inpInfos.setRows(8);
+        inpInfos.setRows(5);
+        inpInfos.setText("");
+        inpInfos.setLineWrap(true);
+        inpInfos.setWrapStyleWord(true);
+        
         inpInfos.setEditable(false);
         
-        painelBaixo.add(inpInfos);
+        
+        JScrollPane scrollPane = new JScrollPane(inpInfos);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        painelBaixo.add(scrollPane);
+        
         
         inpEntrada = new JTextField();
         inpEntrada.setFont(new Font(Font.DIALOG_INPUT,Font.ITALIC,16));
@@ -287,8 +341,10 @@ public class TelaPrincipal extends JFrame{
                 .getScaledInstance(850, 550, Image.SCALE_DEFAULT);
         
         painelCentro = new ImagePanel(img);
-        painelCentro.setLayout(gridLayoutCentro);
 
+        painelCentro.setLayout(gridLayoutCentro);
+        painelCentro.setBorder(BorderFactory.createEmptyBorder());
+        painelCentro.setBackground(Color.black);
         posicionaPersonagem(localAtual);
         
         
@@ -315,8 +371,11 @@ public class TelaPrincipal extends JFrame{
                     JLabel rotulo = new JLabel("");
                     rotulo.setOpaque(true);
                     int opacidade;
-                    int conta = Math.abs(i - posI) + Math.abs(j - posJ) - 2;
-                    opacidade = Math.abs(conta * 80);
+                    int conta;
+                    conta = Math.abs(i - posI) + Math.abs(j - posJ);
+                    if(conta <= 2)
+                        conta = 0;
+                    opacidade = Math.abs(conta * 60);
                     if(opacidade > 255) opacidade= 255;
                     Color escuro = new Color(0,0,0,opacidade);
                     rotulo.setBackground(escuro);
@@ -389,7 +448,7 @@ public class TelaPrincipal extends JFrame{
         localPosicao.put("tv", pos);
         
         pos = new int[2];
-        pos[0] = 7;
+        pos[0] = 6;
         pos[1] = 3;
         localPosicao.put("jardim", pos);
         

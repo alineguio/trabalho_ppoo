@@ -7,6 +7,7 @@ package View;
 
 import Controll.Controlador;
 import Model.Util.AmbienteException;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -20,32 +21,31 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author leoam
  */
-public class TelaInicial extends JFrame{
+public class TelaInicial extends JPanel{
     
     public TelaInicial() throws AmbienteException {
-        super("Bem vindo ao jogo! Clique para jogar!");
         
         montarJanela();
     }
     private void montarJanela(){
-        //this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        //this.setResizable(false);
-        this.setPreferredSize(new Dimension(500,500));
-        this.setResizable(false);
+        this.setBackground(Color.black);
         this.setLayout(new GridLayout(4, 1));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         Font fonte = new Font(Font.MONOSPACED,Font.PLAIN,30);
-        JLabel rotulo = new JLabel("Bem vindo ao jogo!");
+        JLabel rotulo = new JLabel("Blackout Hunt");
+        rotulo.setForeground(Color.white);
         rotulo.setHorizontalAlignment(JLabel.CENTER);
         rotulo.setFont(fonte);
         this.add(rotulo);
         JButton jb = new JButton("Jogar!");
+        jb.setBackground(new Color(143, 186, 255,100));
         jb.setFont(fonte);
         jb.addActionListener(
                 new ActionListener() {
@@ -61,6 +61,7 @@ public class TelaInicial extends JFrame{
         this.add(jb);
         this.add(Box.createHorizontalGlue());
         jb = new JButton("Créditos");
+        jb.setBackground(new Color(143, 186, 255,100));
         jb.addActionListener(
                 new ActionListener() {
                     @Override
@@ -83,7 +84,6 @@ public class TelaInicial extends JFrame{
         
         jb.setFont(fonte);
         this.add(jb);
-        this.pack();
         
     }
 }
