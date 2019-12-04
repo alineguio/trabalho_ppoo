@@ -6,7 +6,6 @@
 package Model.Util;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -14,7 +13,7 @@ import java.util.List;
  */
 public class PalavrasComando {
     private static PalavrasComando instance = null;
-    private static List<String> comandosValidos;
+    private static ArrayList<String> comandosValidos;
     
     /** Construtor dos comandos estáticos do jogo    
     */
@@ -44,7 +43,7 @@ public class PalavrasComando {
      * 
      * @return lista de comandos
      */
-    public String getComandos(){
+    public static String getComandos(){
         String rStr = "";
         
         for(String cmd : comandosValidos){

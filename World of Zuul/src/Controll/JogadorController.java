@@ -24,7 +24,6 @@ public class JogadorController implements JogadorInterface{
     private final Random random = new Random();
     
     private JogadorController(Ambiente ambienteInicial){
-        System.out.println("Cheguei");
         jogador = Jogador.getInstance(random.nextInt((50 - 20 ) + 1) - 20, ambienteInicial);
     }
     

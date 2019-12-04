@@ -13,6 +13,7 @@ import Model.Util.GameOverException;
 import Model.Util.ItemException;
 import Model.Util.JogadorException;
 import Model.Util.Jogo;
+import Model.Util.PalavrasComando;
 import View.TelaInicial;
 import View.TelaPrincipal;
 import java.awt.event.ActionEvent;
@@ -74,9 +75,9 @@ public class Controlador implements ControladorInterface,ActionListener{
         tp = new TelaPrincipal();
         janelaPrincipal.dispose();
         janelaPrincipal = tp;
-        janelaPrincipal.setVisible(true);        
+        janelaPrincipal.setVisible(true);     
+        boasVindas();
     }
-    
     
     
     /** Crie os ambientes fixos do jogo e retorna para criar o Model Jogo
@@ -168,7 +169,7 @@ public class Controlador implements ControladorInterface,ActionListener{
             case "sair":
                 jogadorController.sair();
                 break;
-            case "ir":
+            case "abrir":
                 if (jogadorController.abrirPorta(cmd.getSegundaPalavra())){
                     tp.abrirPorta(cmd.getSegundaPalavra());
                 } else {
@@ -180,7 +181,7 @@ public class Controlador implements ControladorInterface,ActionListener{
                 break;
             default:
                 break;
-        }
+            }
         } catch (JogadorException | ItemException ex) {
             System.out.println("Erro em Controlador: " + ex.getMessage());
         } catch (GameOverException ex) {
@@ -190,6 +191,12 @@ public class Controlador implements ControladorInterface,ActionListener{
                 tp.plantarBomba(false);
             }
         }
+    }
+
+    @Override
+    public void boasVindas() {
+        tp.setInfos("Bem-vindo ao DLC CRUZEIRO SÉRIE B do World Of Zhuul!");
+        tp.setInfos("Os comandos possíveis são: " + PalavrasComando.getComandos());
     }
 
     

@@ -13,5 +13,6 @@ import Model.Util.AmbienteException;
  * @author alfarr
  */
 public interface ControladorInterface {
-    public abstract void jogar() throws AmbienteException;
+    public void jogar() throws AmbienteException;
+    public void boasVindas();
 }
