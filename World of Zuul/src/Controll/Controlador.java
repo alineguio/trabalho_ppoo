@@ -91,6 +91,7 @@ public class Controlador implements ControladorInterface,ActionListener{
      */
     @Override
     public void jogar() throws AmbienteException{
+        janelaPrincipal.setPreferredSize(new Dimension(1900,1900));
         janelaPrincipal.setExtendedState( janelaPrincipal.getExtendedState()|JFrame.MAXIMIZED_BOTH );
         
         
