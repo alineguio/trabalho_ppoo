@@ -25,11 +25,11 @@ public class ArquivoController implements ArquivoInterface {
       try{
           FileWriter arq = new FileWriter("itens.txt");
           arq.write("Tesouro está no ambiente " + tesouro.getAmbiente().getDescricao());
-          arq.write("\nChave Mestra está no ambiente " + chave.getAmbiente().getDescricao());
-          arq.write("\nAs dicas do jogo são: ");
+          arq.write("\nChave Mestra está no ambiente " + chave.getAmbiente().getDescricao() + " e possui " + chave.getUsos() + " usos");
+          arq.write("\nAs dicas do jogo estão no ambiente e são: ");
           for(Dica d: dicas) {
               try {
-                  arq.write("\n -> " + d.fazerAcao());
+                  arq.write("\n  -> " + d.getAmbiente().getDescricao() + ": " + d.fazerAcao());
               } catch (ItemException ex) {
                   System.err.println(ex.getMessage() + "Erro ao armazenar Dica no arquivo");
               }
