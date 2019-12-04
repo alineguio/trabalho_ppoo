@@ -93,13 +93,14 @@ public class ItemController implements ItemInterface {
         }
         ambienteDica = sorteioAmbienteEspecifico(ambientes, ambienteComItem);
         ambienteComItem.add(ambienteDica);
-
+        ambienteTesouro = null;
         
-        ambienteAleatorio = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
-        ambienteTesouro = (tesouro.getAmbiente()).getAmbiente(ambienteAleatorio.getDescricao()); // pega as saídas do ambiente
-         
+        while(ambienteTesouro == null){
+            ambienteAleatorio = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
+            ambienteTesouro = tesouro.getAmbiente().getAmbiente(ambienteAleatorio.getDescricao()); // pega as saídas do ambiente
+        }
 
-        // dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
+        dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
            
         return dicas;
     }
