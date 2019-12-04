@@ -213,10 +213,12 @@ public class Controlador implements ControladorInterface,ActionListener{
                         
                         if(jogoModel.verificaSeHaItem(Jogador.getInstance().getAmbienteAtual()) != null){
                             Item item = jogoModel.verificaSeHaItem(Jogador.getInstance().getAmbienteAtual());
-                            Jogador.getInstance().pegarItem(item);
-                            
-                            if(item instanceof Dica){
-                                tp.acrescentaDica(item.fazerAcao());
+                            if(!Jogador.getInstance().getInventario().contains(item)){
+                                Jogador.getInstance().pegarItem(item);
+
+                                if(item instanceof Dica){
+                                    tp.acrescentaDica(item.fazerAcao());
+                                }
                             }
                         }
                     } else {
@@ -247,7 +249,9 @@ public class Controlador implements ControladorInterface,ActionListener{
         } catch (ItemException | ComandoException ex) {
             System.err.println("Erro em Controlador: " + ex.getMessage());
         } catch (GameOverException ex) {
+
             boolean venceu = false;
+
             if(ex.getMessage().equals("vitoria")){
                 tp.plantarBomba(true);
                 venceu = true;
