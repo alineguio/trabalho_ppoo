@@ -26,7 +26,7 @@ public class JogadorController implements JogadorInterface{
     private final Random random = new Random();
     
     private JogadorController(Ambiente ambienteInicial){
-        jogador = Jogador.getInstance(10, ambienteInicial);
+        jogador = Jogador.getInstance(random.nextInt(30) + 20, ambienteInicial);
     }
     
     public static JogadorController getInstance(Ambiente ambienteInicial){

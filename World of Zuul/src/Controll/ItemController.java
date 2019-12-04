@@ -99,7 +99,7 @@ public class ItemController implements ItemInterface {
         ambienteTesouro = (tesouro.getAmbiente()).getAmbiente(ambienteAleatorio.getDescricao()); // pega as saídas do ambiente
          
 
-        dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
+        // dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
            
         return dicas;
     }
