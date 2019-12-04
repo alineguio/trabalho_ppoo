@@ -341,7 +341,12 @@ public class TelaPrincipal extends JPanel{
                 .getScaledInstance(850, 550, Image.SCALE_DEFAULT);
         
         painelCentro = new ImagePanel(img);
-
+        
+        painelCentro.setMinimumSize(new Dimension(900,600));
+        painelCentro.setMaximumSize(new Dimension(900,600));
+        painelCentro.setPreferredSize(new Dimension(900,600));
+        //painelBaixo.setSize(new Dimension(900,600));
+        
         painelCentro.setLayout(gridLayoutCentro);
         painelCentro.setBorder(BorderFactory.createEmptyBorder());
         painelCentro.setBackground(Color.black);
