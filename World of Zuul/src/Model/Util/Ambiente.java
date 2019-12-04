@@ -76,8 +76,6 @@ public class Ambiente {
         
         return rStr;
     }
-<<<<<<< HEAD
-=======
     
     @Override
     public boolean equals(Object o) {
@@ -94,5 +92,4 @@ public class Ambiente {
         // field comparison
         return Objects.equals(descricao, ambiente.descricao);
     }
->>>>>>> a33caf71e333f0499ba309706e06496d1f7bea72
 }

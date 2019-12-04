@@ -49,12 +49,8 @@ public class ChaveMestra extends Item{
         } else {
             throw new ItemException("Chave mestra quebrou!");
         }
-<<<<<<< HEAD
-    }    
-=======
         
         return Integer.toString(usos);
     }
     
->>>>>>> a33caf71e333f0499ba309706e06496d1f7bea72
 }

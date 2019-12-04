@@ -28,8 +28,7 @@ public class ItemController implements ItemInterface {
     public ChaveMestra gerarChaveMestra(ArrayList<Ambiente> ambientes) {
         Random r = new Random();
         int usos = r.nextInt(13);
-        ChaveMestra chave = null;       
-        chave.getInstance(sorteioAmbiente(ambientes), usos);
+        ChaveMestra chave = ChaveMestra.getInstance(sorteioAmbiente(ambientes), usos);
         
         return chave;
     }
@@ -48,7 +47,6 @@ public class ItemController implements ItemInterface {
         HashMap<String, Ambiente> ambientesPertoTesouro;
         ArrayList<Ambiente> copia = ambientes;
         Ambiente ambienteTesouro;  // ambiente que será colocado na dica sobre o tesouro
-        Dica nova = null;
         
         copia.remove(tesouro.getAmbiente());
         
@@ -60,9 +58,7 @@ public class ItemController implements ItemInterface {
             ambienteTesouro = sorteioAmbiente(copia);
             copia.remove(ambienteTesouro);
             
-            nova.getInstance(ambienteDica, "O tesouro não está no(a) " + ambienteTesouro.getDescricao());
-            dicas.add(nova);
-            nova = null;
+            dicas.add(Dica.getInstance(ambienteDica, "O tesouro não está no(a) " + ambienteTesouro.getDescricao()));
         }
         
         ambienteDica = sorteioAmbiente(ambientes);
@@ -70,9 +66,8 @@ public class ItemController implements ItemInterface {
         
         ambientesPertoTesouro = (tesouro.getAmbiente()).getSaidas();
         ambienteTesouro = ambientesPertoTesouro.get(r.nextInt(ambientes.size()));
-        
-        nova.getInstance(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao());
-        dicas.add(nova);
+
+        dicas.add(Dica.getInstance(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
            
         return dicas;
     }
@@ -84,13 +79,12 @@ public class ItemController implements ItemInterface {
      */
     @Override
     public Tesouro gerarTesouro(ArrayList<Ambiente> ambientes) {
-        Tesouro tesouro = null;  
-        tesouro.getInstance(sorteioAmbiente(ambientes));
+        Tesouro tesouro = Tesouro.getInstance(sorteioAmbiente(ambientes));
         
         return tesouro;
     }
     
-    /** Retorna um ambiente aleatorio que esta dentro de um array 
+    /** Retorna um ambiente aleatorio que está dentro de um array 
      * 
      * @param ambientes - array com todos ambientes que podem ser sorteados
      * @return ambiente sorteado

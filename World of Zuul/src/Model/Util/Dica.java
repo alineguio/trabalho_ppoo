@@ -50,17 +50,10 @@ public class Dica extends Item{
      * 
      * @throws ItemException 
      */
-    @Override
-<<<<<<< HEAD
-    public void fazerAcao() throws ItemException {
-        System.out.println(texto);
-    }  
-=======
+   
+
     public String fazerAcao() throws ItemException {
         return texto;
     }
     
-    
-       
->>>>>>> a33caf71e333f0499ba309706e06496d1f7bea72
 }

@@ -34,34 +34,6 @@ public class Tesouro extends Item{
         return instance;
     }
     
-<<<<<<< HEAD
-    /**  Retorna se o tesouro está no ambiente presente ou não (encontrado ou não)
-     * 
-     * @return Verdadeiro se encontrado, falso o contrário
-     */
-    public boolean encontrado() {
-        return encontrado;
-    }
-
-    /**  Retorna o ambiete em que o tesouro do jogo está
-     * 
-     * @return ambiente em que o tesouro está
-     */
-    public Ambiente getAmbiente() {
-        return ambiente;
-    }
-    
-     /** Define o estado do tesouro
-      * 
-      * @param encontrado - verdadeiro ou falso, encontrado ou não
-      */
-     
-    public void setEncontrado(boolean encontrado) {
-        this.encontrado = encontrado;
-    }
-=======
->>>>>>> a33caf71e333f0499ba309706e06496d1f7bea72
-    
     /** Lança exceção de GameOver de acordo com o estado do Tesouro
      * 
      * @return 
