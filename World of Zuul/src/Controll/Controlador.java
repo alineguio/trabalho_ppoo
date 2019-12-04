@@ -22,9 +22,12 @@ import Model.Util.PalavrasComando;
 import Model.Util.Tesouro;
 import View.TelaInicial;
 import View.TelaPrincipal;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
@@ -53,8 +56,14 @@ public class Controlador implements ControladorInterface,ActionListener{
      */
     private Controlador() throws AmbienteException{
         tp = null;
-        janelaPrincipal = new TelaInicial();
+        janelaPrincipal = new JFrame("Jogo!");
+        ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("assets/img/personagem.png"));
+        janelaPrincipal.setIconImage(img.getImage());
+        janelaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janelaPrincipal.setMinimumSize(new Dimension(500,500));
+        janelaPrincipal.add(new TelaInicial());
         janelaPrincipal.setVisible(true);
+        janelaPrincipal.pack();
         itemController = new ItemController();
         ArrayList<Ambiente> ambientes = criarAmbientes();
         jogoModel = Jogo.getInstance(itemController.getGeneratedItens(ambientes), ambientes);
@@ -82,13 +91,27 @@ public class Controlador implements ControladorInterface,ActionListener{
      */
     @Override
     public void jogar() throws AmbienteException{
-        tp = new TelaPrincipal();
+        janelaPrincipal.setExtendedState( janelaPrincipal.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+        
+        
         janelaPrincipal.dispose();
-        janelaPrincipal = tp;
-        janelaPrincipal.setVisible(true);     
+        
+        janelaPrincipal.setUndecorated(true);
+        janelaPrincipal.setVisible(true);
+        //janelaPrincipal.setResizable(false);
+        
+        janelaPrincipal.setVisible(true);
+        tp = new TelaPrincipal();
+        Container cp = janelaPrincipal.getContentPane();
+        cp.removeAll();
+        
+        cp.add(tp);
+        
+        
         boasVindas();
         tp.setTentativasRestantes(Jogador.getInstance().getChances());
         tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
+        janelaPrincipal.pack();
     }
     
     
@@ -179,7 +202,7 @@ public class Controlador implements ControladorInterface,ActionListener{
             Comando cmd = analisador.pegaComando(comando);
             switch(cmd.pegaPalavra(0)){
             case "sair":
-                tp.setInfos("Obrigado por jogar! Até mais!");
+                tp.exibirAlerta("Obrigado por jogar! Até mais!");
                 System.exit(0);
                 break;
             case "abrir":
@@ -224,13 +247,13 @@ public class Controlador implements ControladorInterface,ActionListener{
         } catch (ItemException | ComandoException ex) {
             System.err.println("Erro em Controlador: " + ex.getMessage());
         } catch (GameOverException ex) {
-            System.out.println("Cheguei aqui");
+            boolean venceu = false;
             if(ex.getMessage().equals("vitoria")){
                 tp.plantarBomba(true);
+                venceu = true;
             } else {
                 tp.plantarBomba(false);
             }
-            System.exit(1);
         } catch (JogadorException ex){
             tp.setInfos(ex.getMessage());
         } catch (Exception e){
