@@ -69,7 +69,6 @@ public class ItemController implements ItemInterface {
         
         Ambiente ambienteDica;
         Ambiente ambienteAleatorio;
-        HashMap<String, Ambiente> ambientesPertoTesouro;
         
         ArrayList<Ambiente> ambienteComItem = new ArrayList<>(); // ambientes que possuem itens já
         ArrayList<Ambiente> ambienteNaDica = new ArrayList<>(); // ambientes que já estão em dicas
@@ -94,13 +93,14 @@ public class ItemController implements ItemInterface {
         }
         ambienteDica = sorteioAmbienteEspecifico(ambientes, ambienteComItem);
         ambienteComItem.add(ambienteDica);
-
-        ambientesPertoTesouro = (tesouro.getAmbiente()).getSaidas(); // pega as saídas do ambiente
-        ambienteAleatorio = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
-        ambienteTesouro = ambientesPertoTesouro.get(ambienteAleatorio.getDescricao()); 
-
+        ambienteTesouro = null;
         
-        //ERRO dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
+        while(ambienteTesouro == null){
+            ambienteAleatorio = sorteioAmbienteEspecifico(ambientes, ambienteNaDica);
+            ambienteTesouro = tesouro.getAmbiente().getAmbiente(ambienteAleatorio.getDescricao()); // pega as saídas do ambiente
+        }
+
+        dicas.add(new Dica(ambienteDica, "O tesouro está próximo ao " + ambienteTesouro.getDescricao()));
            
         return dicas;
     }
@@ -134,6 +134,12 @@ public class ItemController implements ItemInterface {
         return ambiente;
     }
     
+    /** Retorna um ambiente aleatorio que está dentro do primeiro array e não esta dentro do segundo 
+     * 
+     * @param ambientes - array com todos ambientes que podem ser sorteados
+     * @param ambientes - array com todos ambientes que ja foram sorteados
+     * @return ambiente sorteado
+     */
     private Ambiente sorteioAmbienteEspecifico(ArrayList<Ambiente> ambientes, ArrayList<Ambiente> listaComparativa){
         Ambiente ambiente = sorteioAmbiente(ambientes);
         while(listaComparativa.contains(ambiente)){ // se já existir no array list, continuar fazendo sorteio até não conter mais
