@@ -7,6 +7,7 @@ package Model.Util;
 
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  *
@@ -46,12 +47,23 @@ public class Ambiente {
         return descricao;
     }
 
-    /** Retorna a descrição do ambiente
+    /** Retorna a ambiente de acordo com o nome 
      * 
+     * @param nome
      * @return objeto ambiente que esta mapeado na Hash Map saidas
      */
     public Ambiente getAmbiente(String nome) {
-        return saidas.get(nome);
+        if(saidas.containsKey(nome))
+            return saidas.get(nome);
+        return null;
+    }
+    
+    /** Retorna os ambientes adjacentes ao ambiente atual
+     * 
+     * @return objeto ambiente que esta mapeado na Hash Map saidas
+     */
+    public HashMap<String, Ambiente> getSaidas() {
+        return saidas;
     }
     
     /** Retorna uma string com todas as saídas do ambiente concatenadas e separadas por um espaço
@@ -62,10 +74,25 @@ public class Ambiente {
         String rStr = "";
         
         for (String saida : saidas.keySet()){
-            rStr += saida + " ";
+            rStr += saida + "  ";
         }
         
         return rStr;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Ambiente ambiente = (Ambiente) o;
+        // field comparison
+        return Objects.equals(descricao, ambiente.descricao);
+    }
 }

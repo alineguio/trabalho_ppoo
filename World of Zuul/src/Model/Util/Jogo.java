@@ -15,7 +15,7 @@ public class Jogo {
     private final Analisador analisador;
     private final ArrayList<Item> itensGerados;
     private final ArrayList<Ambiente> ambientes;
-    private static final Jogo instance = null;
+    private static Jogo instance = null;
     
     /**Construtor com os itens gerados e ambientes e com o analisador gerado com o Construtor Singleton 
      * 
@@ -35,11 +35,11 @@ public class Jogo {
      * @param ambientes - ambientes do jogo
      * @return - Objeto da classe Jogo
     */
-        if (instance != null){
-            return instance;
+        if (instance == null){
+           instance = new Jogo(itensGerados, ambientes);
         }
         
-        return new Jogo(itensGerados, ambientes);
+        return instance;
     }
     
     /** Retorna o objeto do ambiente com este nome
@@ -65,6 +65,24 @@ public class Jogo {
         return rAmbiente;
         
     }
-      
+    
+    /** Veririca se há algum item (que não seja o tesouro) naquele ambiente e retorna o item encontrado ou nulo
+     * 
+     * @param ambiente - ambiente que se deseja saber se há item
+     * @return 
+     */
+    public Item verificaSeHaItem(Ambiente ambiente){
+        
+        Item item = null;
+        
+        for(Item i : itensGerados){
+            if ((i instanceof Dica || i instanceof ChaveMestra) 
+                    && i.getAmbiente().getDescricao().equals(ambiente.getDescricao())){
+                item = i;
+            }
+        }
+        
+        return item;
+    }
     
 }

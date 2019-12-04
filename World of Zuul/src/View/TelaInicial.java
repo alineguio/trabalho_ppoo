@@ -6,11 +6,14 @@
 package View;
 
 import Controll.Controlador;
+import Model.Util.AmbienteException;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,10 +26,10 @@ import javax.swing.JOptionPane;
  * @author leoam
  */
 public class TelaInicial extends JFrame{
-    private Controlador c;
-    public TelaInicial(Controlador c) {
+    
+    public TelaInicial() throws AmbienteException {
         super("Bem vindo ao jogo! Clique para jogar!");
-        this.c=c;
+        
         montarJanela();
     }
     private void montarJanela(){
@@ -48,7 +51,10 @@ public class TelaInicial extends JFrame{
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        c.jogar();
+                        try {
+                            Controlador.getInstance().jogar();
+                        } catch (AmbienteException ex) {
+                            System.out.println("Ambiente inicial não encontrado!");                        }
                     }
                 }
         );
@@ -63,7 +69,8 @@ public class TelaInicial extends JFrame{
                                 "Pensado e desenvolvido por: \n"
                                         + "Aline Rodrigues Guimarães \n"
                                         + "Álvaro Martins Espíndola\n"
-                                        + "Leonardo Amorim de Sena \n\n"
+                                        + "Leonardo Amorim de Sena \n"
+                                        + "Luiz Otávio Andrade Soares\n\n"
                                         + "Imagens: \n"
                                         + "Freepik - br.freepik.com \n\n"
                                         + "Músicas e efeitos sonoros: \n"

@@ -1,0 +1,5 @@
+Tesouro está no ambiente tv
+Chave Mestra está no ambiente tv
+As dicas do jogo são: 
+ -> O tesouro não está no(a) quarto2
+ -> O tesouro não está no(a) quarto3

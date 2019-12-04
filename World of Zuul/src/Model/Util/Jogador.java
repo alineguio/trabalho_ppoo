@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class Jogador {
     private int chances;
     private final ArrayList<Item> inventario;
-    private static final Jogador instance = null;
-    private final Ambiente ambienteAtual;
+    private static Jogador instance = null;
+    private Ambiente ambienteAtual;
 
     /**Construtor com o número aleatório de chances para abrir portas, e inventário vazio
      * 
@@ -35,11 +35,15 @@ public class Jogador {
      * @return Objeto da classe Jogador
      */
     public static Jogador getInstance(int chances, Ambiente ambienteAtual){
-        if(instance != null){
-            return instance;
+        if(instance == null){
+            instance = new Jogador(chances, ambienteAtual);
         }
-        
-        return new Jogador(chances, ambienteAtual);
+         
+        return instance;
+    }
+    
+    public static Jogador getInstance(){
+        return instance;
     }
     
     /** Método para decrementar as chances do jogador ao tentar abrir uma porta
@@ -50,7 +54,7 @@ public class Jogador {
         if (chances > 0){
             chances--;
         } else {
-            throw new GameOverException("Suas tentativas acabaram!");
+            throw new GameOverException("derrota");
         }
     }
     
@@ -69,4 +73,23 @@ public class Jogador {
     public ArrayList<Item> getInventario(){
         return inventario;
     }
+    
+    /** Retorna o ambiente que o jogador se encontra
+     * 
+     * @return - Objeto da classe Ambiente onde o jogador está
+     */
+    public Ambiente getAmbienteAtual(){
+        return ambienteAtual;
+    }
+    
+    public void setAmbienteAtual(Ambiente ambiente){
+        this.ambienteAtual = ambiente;
+    }
+
+    public int getChances() {
+        return chances;
+    }
+    
+    
+    
 }

@@ -20,6 +20,6 @@ public class GameOverException extends Exception{
         @param message - Exception para declarar que o jogo acabou
     */
     public GameOverException(String message){
-        super("Game over! " + message);
+        super(message);
     }
 }

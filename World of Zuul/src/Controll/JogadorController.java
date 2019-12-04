@@ -6,9 +6,13 @@
 package Controll;
 
 import Model.Util.Ambiente;
-import Model.Util.Comando;
+import Model.Util.AmbienteException;
+import Model.Util.ChaveMestra;
+import Model.Util.GameOverException;
 import Model.Util.Item;
+import Model.Util.ItemException;
 import Model.Util.Jogador;
+import Model.Util.JogadorException;
 import java.util.Random;
 
 /**
@@ -17,40 +21,54 @@ import java.util.Random;
  */
 public class JogadorController implements JogadorInterface{
     
-    private static final JogadorController instance = null;
+    private static JogadorController instance = null;
     private final Jogador jogador;
-    private Random random;
+    private final Random random = new Random();
     
     private JogadorController(Ambiente ambienteInicial){
-        jogador = Jogador.getInstance(random.nextInt((50 - 20 ) + 1) - 20, ambienteInicial);
+        jogador = Jogador.getInstance(10, ambienteInicial);
     }
     
     public static JogadorController getInstance(Ambiente ambienteInicial){
-        if (instance != null){
-            return instance;
+        if (instance == null){
+            instance = new JogadorController(ambienteInicial);
         }
         
-        return new JogadorController(ambienteInicial);
+        return instance;
     }
     
     @Override
-    public void executarComando(Comando comando) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean abrirPorta(String nome) throws JogadorException, GameOverException{
+        if (random.nextBoolean()){
+            jogador.setAmbienteAtual(jogador.getAmbienteAtual().getAmbiente(nome));
+            jogador.decrementarChance();
+            return true;
+        }
+        
+        return false;
     }
 
     @Override
-    public void sair() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void usarChave() throws ItemException, JogadorException{
+        
+        Item item = null;    
+        for(Item i : jogador.getInventario()){
+            if(i instanceof ChaveMestra){
+                item = i;
+                break;
+            }
+        }
+        
+        if(item != null){
+            try {
+                item.fazerAcao();
+            } catch (ItemException e) {
+                throw new ItemException(e.getMessage() + "Erro ao usar o item");
+            } catch (GameOverException ex) {
+                throw new JogadorException(ex.getMessage() + "Tesouro está no inventário do jogador???");
+            } 
+        } else {
+            throw new JogadorException("Ainda não achou a chave!");
+        }
     }
-
-    @Override
-    public void abrirPorta() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void usarItem(Item item) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

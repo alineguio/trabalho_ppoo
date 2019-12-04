@@ -6,15 +6,14 @@
 package Model.Util;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author alfarr
  */
 public class PalavrasComando {
-    private static final PalavrasComando instance = null;
-    private static List<String> comandosValidos;
+    private static PalavrasComando instance = null;
+    private static ArrayList<String> comandosValidos;
     
     /** Construtor dos comandos estáticos do jogo    
     */
@@ -25,6 +24,7 @@ public class PalavrasComando {
         comandosValidos.add("observar");
         comandosValidos.add("ajuda");
         comandosValidos.add("chave");
+        comandosValidos.add("explodir");
     }
     
     
@@ -33,11 +33,11 @@ public class PalavrasComando {
      * @return Objeto da classe PalavrasComando
      */
     public static PalavrasComando getInstance(){
-        if(instance != null){
-            return instance;
+        if(instance == null){
+           instance = new PalavrasComando();
         }
         
-        return new PalavrasComando();
+        return instance;
     }
     
     /** Retorna concatencação, separados por espaço, de cada comando disponível
@@ -48,7 +48,7 @@ public class PalavrasComando {
         String rStr = "";
         
         for(String cmd : comandosValidos){
-            rStr += cmd + " ";
+            rStr += cmd + "  ";
         }
         
         return rStr;

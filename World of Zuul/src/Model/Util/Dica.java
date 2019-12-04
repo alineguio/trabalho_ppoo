@@ -11,7 +11,7 @@ package Model.Util;
  */
 public class Dica extends Item{
     
-    private String texto;
+    private final String texto;
     
     /**Construtor da dica
      * 
@@ -23,23 +23,15 @@ public class Dica extends Item{
         this.texto = texto;
     }
     
-    /** Retorna a dica
-     * 
-     * @return string que contem a dica
-     */
-    public String getTexto() {
-        return texto;
-    }
-
     /** Método para printar o texto que contem a dica
      * 
      * @throws ItemException 
      */
+   
+
     @Override
-    public void fazerAcao() throws ItemException {
-        System.out.println(texto);
+    public String fazerAcao() throws ItemException {
+        return texto;
     }
     
-    
-       
 }

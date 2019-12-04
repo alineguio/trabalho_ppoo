@@ -14,7 +14,7 @@ package Model.Util;
     Classe pai dos itens do jogo: Dica, Tesouro e Chave Mestra 
 */
 public abstract class Item {
-    private final Ambiente ambiente;
+    final Ambiente ambiente;
     
     /** Construtor com o ambiente que o item está
         
@@ -34,9 +34,11 @@ public abstract class Item {
     
     /** Poliformismo: subclasse executa uma ação
      * 
-     * @throws Exception 
+     * @return 
+     * @throws Model.Util.ItemException
+     * @throws Model.Util.GameOverException
      */
-    public abstract void fazerAcao() throws Exception;
+    public abstract String fazerAcao() throws ItemException, GameOverException;
     
     
 }
