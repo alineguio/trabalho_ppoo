@@ -34,6 +34,10 @@ public class Tesouro extends Item{
         return instance;
     }
     
+    public static Tesouro getInstance(){
+        return instance;
+    }
+    
     /** Lança exceção de GameOver de acordo com o estado do Tesouro
      * 
      * @return 

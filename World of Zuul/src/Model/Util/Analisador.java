@@ -39,27 +39,18 @@ public class Analisador {
     /** Método para pegar o comando do prompt
      * @param linha - texto digitado pelo jogador na caixa da GUI
      * @return Objeto do tipo Comando
+     * @throws Model.Util.ComandoException
     */
-    public Comando pegaComando(String linha){
-
-        String palavra1 = null;
-        String palavra2 = null;
-
-
-        Scanner tokenizer = new Scanner(linha);
-        if(tokenizer.hasNext()) {
-            palavra1 = tokenizer.next();      
-            if(tokenizer.hasNext()) {
-                palavra2 = tokenizer.next();      
-            }
+    public Comando pegaComando(String linha) throws ComandoException{
+        
+        String comandos[] = linha.split(" ");
+        
+        if (palavrasComando.ehComando(comandos[0])){
+            return new Comando(linha);
         }
-
-        if(palavrasComando.ehComando(palavra1)) {
-            return new Comando(palavra1, palavra2);
-        }
-        else {
-            return new Comando(null, palavra2); 
-        }
+        
+        throw new ComandoException("Comando inexistente!");
+        
     }
     
     

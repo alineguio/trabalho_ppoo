@@ -38,6 +38,10 @@ public class ChaveMestra extends Item{
         return instance;
     }
     
+    public static ChaveMestra getInstance(){
+        return instance;
+    }
+    
     /** Método para decrementar a quantidade de vezes que a chave mestra ainda pode ser utilizada
      * 
      * @throws ItemException 
@@ -52,5 +56,11 @@ public class ChaveMestra extends Item{
         
         return Integer.toString(usos);
     }
+
+    public int getUsos() {
+        return usos;
+    }
+    
+    
     
 }

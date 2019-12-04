@@ -5,6 +5,8 @@
  */
 package Controll;
 
+import Model.Util.Ambiente;
+import Model.Util.AmbienteException;
 import Model.Util.GameOverException;
 import Model.Util.Item;
 import Model.Util.ItemException;
@@ -16,8 +18,7 @@ import Model.Util.JogadorException;
  */
 public interface JogadorInterface {
     
-    public void sair() throws JogadorException;
     public boolean abrirPorta(String nome) throws JogadorException, GameOverException;
-    public void usarItem(Item item) throws ItemException, JogadorException;
+    public void usarChave() throws ItemException, JogadorException;
     
 }

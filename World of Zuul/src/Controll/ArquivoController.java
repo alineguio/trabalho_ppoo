@@ -7,9 +7,12 @@ package Controll;
 
 import Model.Util.ChaveMestra;
 import Model.Util.Dica;
+import Model.Util.ItemException;
 import Model.Util.Tesouro;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,10 +25,14 @@ public class ArquivoController implements ArquivoInterface {
       try{
           FileWriter arq = new FileWriter("itens.txt");
           arq.write("Tesouro está no ambiente " + tesouro.getAmbiente().getDescricao());
-          arq.write("\n Chave Mestra está no ambiente " + chave.getAmbiente().getDescricao());
-          arq.write("\n As dicas do jogo são: ");
+          arq.write("\nChave Mestra está no ambiente " + chave.getAmbiente().getDescricao());
+          arq.write("\nAs dicas do jogo são: ");
           for(Dica d: dicas) {
-              arq.write("\n -> " + d.getTexto());
+              try {
+                  arq.write("\n -> " + d.fazerAcao());
+              } catch (ItemException ex) {
+                  System.err.println(ex.getMessage() + "Erro ao armazenar Dica no arquivo");
+              }
           }
           arq.close();
       } 

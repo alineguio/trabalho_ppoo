@@ -107,7 +107,7 @@ public class TelaPrincipal extends JFrame{
     * @param texto - Texto que deve ser exibidio na caixa "Informações"
     */
     public void setInfos(String texto){
-        inpInfos.setText(inpDicas.getText() + "\n" + texto);
+        inpInfos.setText(inpInfos.getText() + "\n" + texto);
     }
     
     
@@ -170,21 +170,25 @@ public class TelaPrincipal extends JFrame{
     /** Muda o personagem para o local passado por parâmetro 
     * @param novoAmbiente - Novas dicas que serão exibidas para o usuário (Opções váidas: [escritorio,jantar,tv,jardim,cozinha,banheiro1,quarto1,quarto2,quarto3,quarto4,banheiro2])
     */
-    public void abrirPorta(String novoAmbiente){
-        escurecerCenario();
-        esperarSegundos(1);
-        tocaEfeitosSonoros("abrindo_porta.wav");
-        esperarSegundos(2);
+    public void abrirPorta(String novoAmbiente) throws AmbienteException{
+        if(!localPosicao.containsKey(novoAmbiente))
+            throw new AmbienteException("Esse ambiente não existe!");
+        
+        //escurecerCenario();
+        //esperarSegundos(1);
+        //tocaEfeitosSonoros("abrindo_porta.wav");
+        //esperarSegundos(2);
         posicionaPersonagem(novoAmbiente);
+        
     }
     /** Personagem tentou mudar de ambiente porém sem sucesso 
     */
     public void portaTrancada(){
-        escurecerCenario();
-        esperarSegundos(1);
-        tocaEfeitosSonoros("porta_fechada.wav");
-        esperarSegundos(2);
-        posicionaPersonagem(localAtual);
+        //escurecerCenario();
+        //esperarSegundos(1);
+        //tocaEfeitosSonoros("porta_fechada.wav");
+        //esperarSegundos(2);
+        //posicionaPersonagem(localAtual);
     }
     
     private void montarJanela(){

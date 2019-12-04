@@ -8,12 +8,18 @@ package Controll;
 import Model.Util.Ambiente;
 import Model.Util.AmbienteException;
 import Model.Util.Analisador;
+import Model.Util.ChaveMestra;
 import Model.Util.Comando;
+import Model.Util.ComandoException;
+import Model.Util.Dica;
 import Model.Util.GameOverException;
+import Model.Util.Item;
 import Model.Util.ItemException;
+import Model.Util.Jogador;
 import Model.Util.JogadorException;
 import Model.Util.Jogo;
 import Model.Util.PalavrasComando;
+import Model.Util.Tesouro;
 import View.TelaInicial;
 import View.TelaPrincipal;
 import java.awt.event.ActionEvent;
@@ -34,10 +40,11 @@ import javax.swing.JTextField;
 public class Controlador implements ControladorInterface,ActionListener{
     private JFrame janelaPrincipal;
     private TelaPrincipal tp;
-    private Jogo jogoModel;
+    private final Jogo jogoModel;
     private static Controlador instance = null;
     private final JogadorController jogadorController;
     private final Analisador analisador;
+    private final ItemController itemController;
 
     
     /** Construtor da GUI, do core do jogo, do Controlador da classe Jogador e do Analisador
@@ -46,11 +53,14 @@ public class Controlador implements ControladorInterface,ActionListener{
      */
     private Controlador() throws AmbienteException{
         tp = null;
-        janelaPrincipal = new TelaInicial(this);
+        janelaPrincipal = new TelaInicial();
         janelaPrincipal.setVisible(true);
-        jogoModel = Jogo.getInstance(null, criarAmbientes());
+        itemController = new ItemController();
+        ArrayList<Ambiente> ambientes = criarAmbientes();
+        jogoModel = Jogo.getInstance(itemController.getGeneratedItens(ambientes), ambientes);
         jogadorController = JogadorController.getInstance(jogoModel.getAmbiente("tv"));     
         analisador = Analisador.getInstance();
+        
     }
     
     /** Construtor Singleton
@@ -77,6 +87,8 @@ public class Controlador implements ControladorInterface,ActionListener{
         janelaPrincipal = tp;
         janelaPrincipal.setVisible(true);     
         boasVindas();
+        tp.setTentativasRestantes(Jogador.getInstance().getChances());
+        tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
     }
     
     
@@ -161,42 +173,78 @@ public class Controlador implements ControladorInterface,ActionListener{
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
-        String comando = ((JTextField)ae.getSource()).getText();
-        
-        Comando cmd = analisador.pegaComando(comando);
+      
         try {
-            switch(cmd.getPalavraComando()){
+            String comando = ((JTextField)ae.getSource()).getText();
+            Comando cmd = analisador.pegaComando(comando);
+            switch(cmd.pegaPalavra(0)){
             case "sair":
-                jogadorController.sair();
+                tp.setInfos("Obrigado por jogar! Até mais!");
+                System.exit(0);
                 break;
             case "abrir":
-                if (jogadorController.abrirPorta(cmd.getSegundaPalavra())){
-                    tp.abrirPorta(cmd.getSegundaPalavra());
+                if(Jogador.getInstance().getAmbienteAtual().getAmbiente(cmd.pegaPalavra(1)) != null){
+                    if (jogadorController.abrirPorta(cmd.pegaPalavra(1))){
+                        tp.abrirPorta(cmd.pegaPalavra(1));
+                        tp.setInfos("As saídas são: " + Jogador.getInstance().getAmbienteAtual().saidasToString());
+                        
+                        if(jogoModel.verificaSeHaItem(Jogador.getInstance().getAmbienteAtual()) != null){
+                            Item item = jogoModel.verificaSeHaItem(Jogador.getInstance().getAmbienteAtual());
+                            Jogador.getInstance().pegarItem(item);
+                            
+                            if(item instanceof Dica){
+                                tp.acrescentaDica(item.fazerAcao());
+                            }
+                        }
+                    } else {
+                        tp.portaTrancada();
+                    }
+                    tp.setTentativasRestantes(Jogador.getInstance().getChances());
                 } else {
-                    tp.portaTrancada();
+                    tp.setInfos("Não há saídas para esse lugar!");
                 }
                 break;
             case "chave":
-                jogadorController.usarItem(null); // Arrumar com código da Aline!
+                jogadorController.usarChave();
+                tp.abrirPorta(cmd.pegaPalavra(1));
+                tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
+                tp.setInfos("As saídas são: " + Jogador.getInstance().getAmbienteAtual().saidasToString());
                 break;
+            case "ajuda":
+                tp.setInfos("Os comandos possíveis são: \n" + PalavrasComando.getInstance().getComandos());
+                break;
+            case "observar":
+                tp.setInfos("As saídas são: " + Jogador.getInstance().getAmbienteAtual().saidasToString());
+                break;
+            case "explodir":
+                Tesouro.getInstance().fazerAcao();
             default:
                 break;
             }
-        } catch (JogadorException | ItemException ex) {
-            System.out.println("Erro em Controlador: " + ex.getMessage());
+        } catch (ItemException | ComandoException ex) {
+            System.err.println("Erro em Controlador: " + ex.getMessage());
         } catch (GameOverException ex) {
+            System.out.println("Cheguei aqui");
             if(ex.getMessage().equals("vitoria")){
                 tp.plantarBomba(true);
             } else {
                 tp.plantarBomba(false);
             }
+            System.exit(1);
+        } catch (JogadorException ex){
+            tp.setInfos(ex.getMessage());
+        } catch (Exception e){
+            System.err.println(e.getMessage() + "Erro na interface");
         }
+        
+        
+        
     }
 
     @Override
     public void boasVindas() {
         tp.setInfos("Bem-vindo ao DLC CRUZEIRO SÉRIE B do World Of Zhuul!");
-        tp.setInfos("Os comandos possíveis são: " + PalavrasComando.getComandos());
+        tp.setInfos("Os comandos possíveis são: " + PalavrasComando.getInstance().getComandos());
     }
 
     

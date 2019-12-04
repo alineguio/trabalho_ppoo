@@ -5,54 +5,34 @@
  */
 package Model.Util;
 
+
 /**
  *
  * @author alfarr
  */
 public class Comando {
-    private final String palavraComando;
-    private final String segundaPalavra;
-
-    /**Construtor de comando com duas palavras
+    private final String[] palavras_comando;
+    
+    /**Construtor de comando
      * 
-     * @param palavraComando - primeira palavra do comando
-     * @param segundaPalavra - segunda palavra do comando
+     * @param linha - linha completa do comando digitado
      */
-    public Comando(String palavraComando, String segundaPalavra) {
-        this.palavraComando = palavraComando;
-        this.segundaPalavra = segundaPalavra;
+    public Comando(String linha) {
+        this.palavras_comando = linha.split(" ");
     }
     
-    /**Construtor de comando com uma palavra
+    /** Pega palavra específica da linha de comando
      * 
-     * @param palavraComando - palavra do comando
+     * @param index - posição da palavra na linha do comando
+     * @return
+     * @throws ComandoException 
      */
-    public Comando(String palavraComando){
-        this.palavraComando = palavraComando;
-        segundaPalavra = null;
+    public String pegaPalavra(int index) throws ComandoException{
+        try{
+            return palavras_comando[index];
+        } catch (ArrayIndexOutOfBoundsException e){
+            throw new ComandoException("Palavra não encontrada no comando");
+        }
     }
-    
-    /** Retorna a primeira palavra do comando
-     * 
-     * @return string com primeira palavra do comando
-     */
-    public String getPalavraComando(){
-        return palavraComando;
-    }
-    
-    /** Retorna a segunda palavra do comando
-     * 
-     * @return string com segunda palavra do comando
-     */
-    public String getSegundaPalavra(){
-        return segundaPalavra;
-    }
-    
-    /** Retorna booleano - true se o comando estiver vazio, false se não estiver
-     * 
-     * @return boolean que verifica se o comando esta vazio 
-     */
-    public boolean comandoVazio(){
-        return (palavraComando == null);
-    }
+            
 }

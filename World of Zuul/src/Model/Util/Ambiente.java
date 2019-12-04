@@ -49,10 +49,13 @@ public class Ambiente {
 
     /** Retorna a ambiente de acordo com o nome 
      * 
+     * @param nome
      * @return objeto ambiente que esta mapeado na Hash Map saidas
      */
     public Ambiente getAmbiente(String nome) {
-        return saidas.get(nome);
+        if(saidas.containsKey(nome))
+            return saidas.get(nome);
+        return null;
     }
     
     /** Retorna os ambientes adjacentes ao ambiente atual
@@ -71,7 +74,7 @@ public class Ambiente {
         String rStr = "";
         
         for (String saida : saidas.keySet()){
-            rStr += saida + " ";
+            rStr += saida + "  ";
         }
         
         return rStr;

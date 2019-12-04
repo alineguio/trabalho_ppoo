@@ -24,6 +24,7 @@ public class PalavrasComando {
         comandosValidos.add("observar");
         comandosValidos.add("ajuda");
         comandosValidos.add("chave");
+        comandosValidos.add("explodir");
     }
     
     
@@ -32,7 +33,7 @@ public class PalavrasComando {
      * @return Objeto da classe PalavrasComando
      */
     public static PalavrasComando getInstance(){
-        if(instance != null){
+        if(instance == null){
            instance = new PalavrasComando();
         }
         
@@ -43,11 +44,11 @@ public class PalavrasComando {
      * 
      * @return lista de comandos
      */
-    public static String getComandos(){
+    public String getComandos(){
         String rStr = "";
         
         for(String cmd : comandosValidos){
-            rStr += cmd + " ";
+            rStr += cmd + "  ";
         }
         
         return rStr;

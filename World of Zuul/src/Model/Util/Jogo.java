@@ -65,6 +65,24 @@ public class Jogo {
         return rAmbiente;
         
     }
-      
+    
+    /** Veririca se há algum item (que não seja o tesouro) naquele ambiente e retorna o item encontrado ou nulo
+     * 
+     * @param ambiente - ambiente que se deseja saber se há item
+     * @return 
+     */
+    public Item verificaSeHaItem(Ambiente ambiente){
+        
+        Item item = null;
+        
+        for(Item i : itensGerados){
+            if ((i instanceof Dica || i instanceof ChaveMestra) 
+                    && i.getAmbiente().getDescricao().equals(ambiente.getDescricao())){
+                item = i;
+            }
+        }
+        
+        return item;
+    }
     
 }

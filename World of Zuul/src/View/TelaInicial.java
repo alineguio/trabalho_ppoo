@@ -26,10 +26,10 @@ import javax.swing.JOptionPane;
  * @author leoam
  */
 public class TelaInicial extends JFrame{
-    private Controlador c;
-    public TelaInicial(Controlador c) {
+    
+    public TelaInicial() throws AmbienteException {
         super("Bem vindo ao jogo! Clique para jogar!");
-        this.c=c;
+        
         montarJanela();
     }
     private void montarJanela(){
@@ -52,7 +52,7 @@ public class TelaInicial extends JFrame{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            c.jogar();
+                            Controlador.getInstance().jogar();
                         } catch (AmbienteException ex) {
                             System.out.println("Ambiente inicial não encontrado!");                        }
                     }

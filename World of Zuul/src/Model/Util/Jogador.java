@@ -35,7 +35,6 @@ public class Jogador {
      * @return Objeto da classe Jogador
      */
     public static Jogador getInstance(int chances, Ambiente ambienteAtual){
-        System.out.println("Erro");
         if(instance == null){
             instance = new Jogador(chances, ambienteAtual);
         }
@@ -86,5 +85,11 @@ public class Jogador {
     public void setAmbienteAtual(Ambiente ambiente){
         this.ambienteAtual = ambiente;
     }
+
+    public int getChances() {
+        return chances;
+    }
+    
+    
     
 }

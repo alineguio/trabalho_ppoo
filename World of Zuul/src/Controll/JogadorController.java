@@ -6,6 +6,8 @@
 package Controll;
 
 import Model.Util.Ambiente;
+import Model.Util.AmbienteException;
+import Model.Util.ChaveMestra;
 import Model.Util.GameOverException;
 import Model.Util.Item;
 import Model.Util.ItemException;
@@ -24,7 +26,7 @@ public class JogadorController implements JogadorInterface{
     private final Random random = new Random();
     
     private JogadorController(Ambiente ambienteInicial){
-        jogador = Jogador.getInstance(random.nextInt((50 - 20 ) + 1) - 20, ambienteInicial);
+        jogador = Jogador.getInstance(10, ambienteInicial);
     }
     
     public static JogadorController getInstance(Ambiente ambienteInicial){
@@ -35,12 +37,6 @@ public class JogadorController implements JogadorInterface{
         return instance;
     }
     
-
-    @Override
-    public void sair() throws JogadorException{
-        throw new JogadorException("Jogador saiu do jogo!");
-    }
-
     @Override
     public boolean abrirPorta(String nome) throws JogadorException, GameOverException{
         if (random.nextBoolean()){
@@ -53,18 +49,26 @@ public class JogadorController implements JogadorInterface{
     }
 
     @Override
-    public void usarItem(Item item) throws ItemException, JogadorException{
-        if (jogador.getInventario().contains(item)){            
+    public void usarChave() throws ItemException, JogadorException{
+        
+        Item item = null;    
+        for(Item i : jogador.getInventario()){
+            if(i instanceof ChaveMestra){
+                item = i;
+                break;
+            }
+        }
+        
+        if(item != null){
             try {
                 item.fazerAcao();
             } catch (ItemException e) {
                 throw new ItemException(e.getMessage() + "Erro ao usar o item");
             } catch (GameOverException ex) {
-                throw new JogadorException(ex.getMessage() + "Tesouro está no inventário do jogador.");
+                throw new JogadorException(ex.getMessage() + "Tesouro está no inventário do jogador???");
             } 
         } else {
-            throw new JogadorException("Item não está no inventário! Tá tentando usar cheat é?");
+            throw new JogadorException("Ainda não achou a chave!");
         }
     }
-    
 }

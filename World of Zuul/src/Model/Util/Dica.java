@@ -11,47 +11,25 @@ package Model.Util;
  */
 public class Dica extends Item{
     
-    private String texto;
-    private static final Dica instance = null;
+    private final String texto;
     
     /**Construtor da dica
      * 
      * @param ambiente - ambiente em que a dica se encontra
      * @param texto - string que contem a dica
      */
-    private Dica(Ambiente ambiente, String texto) {
+    public Dica(Ambiente ambiente, String texto) {
         super(ambiente);
         this.texto = texto;
     }
     
-    /** Construtor Singleton
-     * 
-     * @param ambiente - ambiente em que a dica se encontra
-     * @param texto - string que contem a dica
-     * @return - Objeto da classe Dica
-    */
-    public static Dica getInstance(Ambiente ambiente, String texto){
-        if (instance != null){
-            return instance;
-        }
-        
-        return new Dica(ambiente, texto);
-    }
-    
-    /** Retorna a dica
-     * 
-     * @return string que contem a dica
-     */
-    public String getTexto() {
-        return texto;
-    }
-
     /** Método para printar o texto que contem a dica
      * 
      * @throws ItemException 
      */
    
 
+    @Override
     public String fazerAcao() throws ItemException {
         return texto;
     }
