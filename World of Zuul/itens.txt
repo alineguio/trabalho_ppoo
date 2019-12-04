@@ -1,6 +1,6 @@
-Tesouro está no ambiente quarto4
-Chave Mestra está no ambiente jardim e possui 4 usos
+Tesouro está no ambiente cozinha
+Chave Mestra está no ambiente corredor e possui 7 usos
 As dicas do jogo estão no ambiente e são: 
-  -> quarto3: O tesouro não está no(a) cozinha
-  -> quarto2: O tesouro não está no(a) jantar
-  -> jardim: O tesouro está próximo ao corredor
+  -> quarto1: O tesouro não está no(a) escritorio
+  -> escritorio: O tesouro não está no(a) quarto3
+  -> quarto2: O tesouro está próximo ao jardim
