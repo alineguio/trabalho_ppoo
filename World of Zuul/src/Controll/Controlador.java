@@ -268,7 +268,7 @@ public class Controlador implements ControladorInterface,ActionListener{
 
     @Override
     public void boasVindas() {
-        tp.setInfos("Bem-vindo ao DLC CRUZEIRO SÉRIE B do World Of Zhuul!");
+        tp.setInfos("Bem-vindo ao Blackout Hunt");
         tp.setInfos("Os comandos possíveis são: " + PalavrasComando.getInstance().getComandos());
     }
 
