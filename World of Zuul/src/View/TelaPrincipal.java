@@ -145,6 +145,9 @@ public class TelaPrincipal extends JPanel{
         
     }
     
+    /** Método para tocar a música principal do jogo
+     * @param caminho - String do caminho da música 
+    */
     private void tocarMusica(String caminho){
         try{
             URL som = getClass().getClassLoader().getResource("assets/sounds/"+caminho);
@@ -158,6 +161,9 @@ public class TelaPrincipal extends JPanel{
         }
     }
     
+    /** Método para tocar sons de efeitos sonoros
+     * @param nomeMusica - nome e extensão do arquivo na pasta "assets/sounds/"
+    */
     private void tocaEfeitosSonoros(String nomeMusica){
         try{
             URL som = getClass().getClassLoader().getResource("assets/sounds/"+nomeMusica);       
@@ -172,6 +178,10 @@ public class TelaPrincipal extends JPanel{
         }
     }
     
+    /** Método para esperar algum tempo e depois executar alguma ação
+     * @param tempo - Tempo em segundos que deve ser esperado
+     * @param taskPerformer - Ações que serão realizadas depois de alguns segundos
+    */
     private void esperarSegundos(int tempo,ActionListener taskPerformer){
         try{
             tempo *= 1000;
@@ -183,7 +193,9 @@ public class TelaPrincipal extends JPanel{
         }
     }
     
-    
+    /** Método para exibir um JOptionPane de alerta
+     * @param info - String que será exibida no painel
+    */
     public void exibirAlerta(String info){
         JOptionPane.showMessageDialog(this.getParent(), info);
     }
@@ -224,6 +236,9 @@ public class TelaPrincipal extends JPanel{
         });
     }
     
+    /** Método que monta o painel
+     * 
+    */
     private void montarJanela(){
         this.setLayout(new BorderLayout());
         
@@ -235,6 +250,9 @@ public class TelaPrincipal extends JPanel{
 
     }
 
+    /** Método que monta painel da esquerda
+     * 
+    */
     private void montarPainelEsq() {
         painelEsquerda = new JPanel();
         painelEsquerda.setBackground(Color.BLACK);
@@ -275,6 +293,9 @@ public class TelaPrincipal extends JPanel{
         
     }
 
+    /** Método que monta o painel da direita
+     * 
+    */
     private void montarPainelDir() {
         painelDireita = new JPanel();
         painelDireita.setBackground(Color.black);
@@ -301,6 +322,9 @@ public class TelaPrincipal extends JPanel{
         
     }
 
+    /** Método que monta o painel de baixo
+     * 
+    */
     private void montarPainelBaixo() {
         painelBaixo = new JPanel();
         
@@ -334,6 +358,9 @@ public class TelaPrincipal extends JPanel{
         
     }
 
+    /** Método que monta o painel do centro (mapa)
+     * 
+    */
     private void montarPainelCentro() {
         
         Image img = new ImageIcon(getClass().getClassLoader().getResource("assets/img/cenario.png"))
@@ -354,6 +381,10 @@ public class TelaPrincipal extends JPanel{
         
         
     }
+    
+    /** Método que posiciona o personagem em algum ambiente
+     * 
+    */
     private void posicionaPersonagem(String local){
         painelCentro.removeAll();
         int posI = localPosicao.get(local)[0];
@@ -392,6 +423,10 @@ public class TelaPrincipal extends JPanel{
         painelCentro.revalidate();
         painelCentro.repaint();
     } 
+    
+    /** Método que exibe a vitória para o usuário
+     * 
+    */
     private void vitoriaFinal(){
         
         painelCentro.removeAll();
@@ -434,7 +469,9 @@ public class TelaPrincipal extends JPanel{
     } 
     
 
-
+    /** Método que inicializa o HasMap de locais (associa local com posição no mapa)
+     * 
+    */
     private void inicializarHashMap() {
         int pos[] = new int[2];
         
@@ -499,6 +536,9 @@ public class TelaPrincipal extends JPanel{
         
     }
 
+    /** Método que escurece o mapa
+     * 
+    */
     private void escurecerCenario() {
         painelCentro.removeAll();
         for(int i=0;i<gridLayoutCentro.getRows();i++){

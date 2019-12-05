@@ -8,17 +8,12 @@ package View;
 import Controll.Controlador;
 import Model.Util.AmbienteException;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,15 +23,20 @@ import javax.swing.JPanel;
  * @author leoam
  */
 public class TelaInicial extends JPanel{
-    
+    /** Método construtor
+     * 
+     * @throws Model.Util.AmbienteException
+    */
     public TelaInicial() throws AmbienteException {
-        
         montarJanela();
     }
+    
+    /** Método que monta o painel
+     * 
+    */
     private void montarJanela(){
         this.setBackground(Color.black);
         this.setLayout(new GridLayout(4, 1));
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         Font fonte = new Font(Font.MONOSPACED,Font.PLAIN,30);
         JLabel rotulo = new JLabel("Blackout Hunt");
