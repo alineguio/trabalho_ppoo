@@ -1,3 +1,4 @@
+
 Tesouro está no ambiente cozinha
 Chave Mestra está no ambiente corredor e possui 7 usos
 As dicas do jogo estão no ambiente e são: 
