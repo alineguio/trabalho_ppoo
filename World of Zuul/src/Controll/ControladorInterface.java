@@ -10,7 +10,7 @@ import Model.Util.AmbienteException;
 
 /** Interface para métodos da classe Controlador/JogoController
  *
- * @author alfarr
+ * 
  */
 public interface ControladorInterface {
     public void jogar() throws AmbienteException;

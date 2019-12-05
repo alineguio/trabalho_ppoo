@@ -5,10 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
+
 public class Tesouro extends Item{
     
     private static Tesouro instance = null;

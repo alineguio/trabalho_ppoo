@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /** Interface para métodos da classe Controlador/ItemController
  *
- * @author alinerguio
+ * 
  */
 public interface ItemInterface {  
     

@@ -5,10 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
+
 public class ComandoException extends Exception{
     /** Construtor padrão da classe Exception    */
     public ComandoException(){

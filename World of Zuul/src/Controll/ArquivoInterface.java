@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /** Interface para métodos da classe Controlador/ArquivoController
  *
- * @author alinerguio
+ * 
  */
 public interface ArquivoInterface {
     public void gravarArquivo(Tesouro tesouro, ChaveMestra chave, ArrayList<Dica> dicas);

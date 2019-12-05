@@ -11,12 +11,9 @@ import Model.Util.ItemException;
 import Model.Util.Tesouro;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
- * @author alinerguio
+ * 
  */
 public class ArquivoController implements ArquivoInterface {
 

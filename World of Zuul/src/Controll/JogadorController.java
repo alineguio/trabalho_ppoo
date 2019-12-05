@@ -6,7 +6,6 @@
 package Controll;
 
 import Model.Util.Ambiente;
-import Model.Util.AmbienteException;
 import Model.Util.ChaveMestra;
 import Model.Util.GameOverException;
 import Model.Util.Item;
@@ -15,10 +14,6 @@ import Model.Util.Jogador;
 import Model.Util.JogadorException;
 import java.util.Random;
 
-/**
- *
- * @author alfarr
- */
 public class JogadorController implements JogadorInterface{
     
     private static JogadorController instance = null;

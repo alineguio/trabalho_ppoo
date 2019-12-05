@@ -31,15 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-/**
- *
- * @author leoam
- */
 
-/** Controlador do Jogo 
- * 
- * @author alfarr
- */
 public class Controlador implements ControladorInterface,ActionListener{
     private JFrame janelaPrincipal;
     private TelaPrincipal tp;

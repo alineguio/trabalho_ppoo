@@ -5,10 +5,6 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
 public class AmbienteException extends Exception{
     /** Construtor padrão da classe Exception    */
     public AmbienteException(){
