@@ -111,7 +111,7 @@ public class Controlador implements ControladorInterface,ActionListener{
         
         boasVindas();
         tp.setTentativasRestantes(Jogador.getInstance().getChances());
-        tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
+        tp.setDurabilidadeChave(0);
         janelaPrincipal.pack();
     }
     
@@ -220,6 +220,10 @@ public class Controlador implements ControladorInterface,ActionListener{
                                 if(item instanceof Dica){
                                     tp.acrescentaDica(item.fazerAcao());
                                 }
+                                
+                                if(item instanceof ChaveMestra){
+                                    tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
+                                }
                             }
                         }
                     } else {
@@ -233,6 +237,7 @@ public class Controlador implements ControladorInterface,ActionListener{
             case "chave":
                 jogadorController.usarChave();
                 tp.abrirPorta(cmd.pegaPalavra(1));
+                Jogador.getInstance().setAmbienteAtual(jogoModel.getAmbiente(cmd.pegaPalavra(1)));
                 tp.setDurabilidadeChave(ChaveMestra.getInstance().getUsos());
                 tp.setInfos("As saídas são: " + Jogador.getInstance().getAmbienteAtual().saidasToString());
                 break;
