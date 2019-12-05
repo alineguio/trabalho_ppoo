@@ -39,9 +39,9 @@ public class JogadorController implements JogadorInterface{
     
     @Override
     public boolean abrirPorta(String nome) throws JogadorException, GameOverException{
+        jogador.decrementarChance();
         if (random.nextBoolean()){
             jogador.setAmbienteAtual(jogador.getAmbienteAtual().getAmbiente(nome));
-            jogador.decrementarChance();
             return true;
         }
         
