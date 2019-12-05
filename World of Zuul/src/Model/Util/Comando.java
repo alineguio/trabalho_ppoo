@@ -6,10 +6,7 @@
 package Model.Util;
 
 
-/**
- *
- * @author alfarr
- */
+
 public class Comando {
     private final String[] palavras_comando;
     

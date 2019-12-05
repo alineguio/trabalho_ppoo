@@ -7,10 +7,7 @@ package Model.Util;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author alfarr
- */
+
 public class PalavrasComando {
     private static PalavrasComando instance = null;
     private static ArrayList<String> comandosValidos;

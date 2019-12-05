@@ -5,10 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
+
 public class JogoException extends Exception{
     
     /**

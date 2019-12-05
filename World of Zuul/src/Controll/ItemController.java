@@ -11,13 +11,9 @@ import Model.Util.Dica;
 import Model.Util.Item;
 import Model.Util.Tesouro;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
-/**
- *
- * @author alinerguio
- */
+
 public class ItemController implements ItemInterface {
     
     /** Cria os itens do jogo 

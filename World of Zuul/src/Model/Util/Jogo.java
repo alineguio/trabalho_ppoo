@@ -7,10 +7,7 @@ package Model.Util;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author alfarr
- */
+
 public class Jogo {
     private final Analisador analisador;
     private final ArrayList<Item> itensGerados;

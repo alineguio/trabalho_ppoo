@@ -5,14 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
 
-/*
-    Classe pai dos itens do jogo: Dica, Tesouro e Chave Mestra 
-*/
 public abstract class Item {
     final Ambiente ambiente;
     

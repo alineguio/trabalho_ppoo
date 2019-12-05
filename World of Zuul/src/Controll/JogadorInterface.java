@@ -5,17 +5,11 @@
  */
 package Controll;
 
-import Model.Util.Ambiente;
-import Model.Util.AmbienteException;
 import Model.Util.GameOverException;
-import Model.Util.Item;
 import Model.Util.ItemException;
 import Model.Util.JogadorException;
 
-/**
- *
- * @author alfarr
- */
+
 public interface JogadorInterface {
     
     public boolean abrirPorta(String nome) throws JogadorException, GameOverException;

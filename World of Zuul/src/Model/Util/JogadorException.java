@@ -5,10 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
+
 public class JogadorException extends Exception{
     
     /** Construtor padrão Exception

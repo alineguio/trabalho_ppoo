@@ -5,18 +5,12 @@
  */
 package Model.Util;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.BorderFactory;
 
-/**
- *
- * @author leoam
- */
+
 public class ImagePanel extends JPanel{
     private Image img;
 

@@ -5,10 +5,7 @@
  */
 package Model.Util;
 
-/**
- *
- * @author alfarr
- */
+
 public class Dica extends Item{
     
     private final String texto;

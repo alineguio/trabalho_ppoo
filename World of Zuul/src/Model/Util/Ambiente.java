@@ -9,10 +9,6 @@ package Model.Util;
 import java.util.HashMap;
 import java.util.Objects;
 
-/**
- *
- * @author alfarr
- */
 
 
 public class Ambiente {

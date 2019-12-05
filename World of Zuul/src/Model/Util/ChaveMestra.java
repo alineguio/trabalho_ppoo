@@ -6,10 +6,7 @@
 package Model.Util;
 
 
-/**
- *
- * @author alfarr
- */
+
 public class ChaveMestra extends Item{
     private int usos;
     private static ChaveMestra instance = null;

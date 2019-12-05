@@ -7,10 +7,7 @@ package Model.Util;
 
 import java.util.Scanner;
 
-/**
- *
- * @author alfarr
- */
+
 public class Analisador {
     private final Scanner scanner;
     private final PalavrasComando palavrasComando;

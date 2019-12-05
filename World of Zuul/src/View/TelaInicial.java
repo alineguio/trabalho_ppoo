@@ -18,10 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- *
- * @author leoam
- */
+
 public class TelaInicial extends JPanel{
     /** Método construtor
      * 
