@@ -12,36 +12,33 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 
-/**
- *
- * @author leoam
- */
-public class TelaPrincipal {
+
+public class TelaPrincipal extends JPanel{
     private JPanel painelEsquerda;
     private JPanel painelDireita;
     private JPanel painelBaixo;
-    private ImagePanel painelCentro;
-    private JFrame janela;
-    private GridLayout gridLayoutCentro;
-    private HashMap<String,int[]> localPosicao;
+    private JPanel painelCentro;
+    private final GridLayout gridLayoutCentro;
+    private final HashMap<String,int[]> localPosicao;
     private JTextField inpTentativasRestantes;
     private JTextField inpDurabilidadeChaveMestra;
     private JTextArea inpDicas;
@@ -49,8 +46,13 @@ public class TelaPrincipal {
     private JTextField inpEntrada;
     private Clip musicaPrincipal;
     
-    
-    public TelaPrincipal() {
+    /** Método construror da Tela Principal do jogo
+     * @throws Model.Util.AmbienteException
+    */
+    public TelaPrincipal() throws AmbienteException {
+        
+        this.controlador = Controlador.getInstance();
+        localAtual = "tv";
         localPosicao = new HashMap<>();
         inicializarHasMap();
         
@@ -68,7 +70,79 @@ public class TelaPrincipal {
         tocarMusica();
     }
     
-    private void tocarMusica(){
+    /** Seta o JTextField de "tentativas restantes" de acordo com o parâmetro. 
+    * @param numero - Novo número de tentativas restantes
+    */
+    
+    public void setTentativasRestantes(int numero){
+        inpTentativasRestantes.setText(String.valueOf(numero));
+    }
+    
+    /** Seta a durabilidade da chave mestra de acordo com o parâmetro
+    * @param numero - Nova durabilidade da chave mestra
+    */
+    public void setDurabilidadeChave(int numero){
+        inpDurabilidadeChaveMestra.setText(String.valueOf(numero));
+    }
+    
+    /** Seta o texto de dicas (apaga o conteúdo anterior e escreve segundo o parâmetro)
+    * @param dicas - Novas dicas que serão exibidas para o usuário
+    */
+    public void setDicas(String dicas){
+        inpDicas.setText(dicas);
+    }
+    
+    /** Acrescenta uma nova dica (NÃO apaga o conteúdo anterior, apenas concatena)
+    * @param dica - Texto da nova dica que deve ser concatenada
+    */
+    public void acrescentaDica(String dica){
+        inpDicas.setText(inpDicas.getText() +"\n" +dica);
+    }
+    
+    /** Seta o texto de informações (caixa de texto logo acima da entrada do usuário)
+    * @param texto - Texto que deve ser exibidio na caixa "Informações"
+    */
+    public void setInfos(String texto){
+        inpInfos.setText(inpInfos.getText() + "\n" + texto);
+    }
+    
+    
+    /** Método para terminar o jogo
+    * @param vitoria - Define se o usuário plantou a bomba no local certo (portanto venceu o jogo) ou não
+    */
+    public void plantarBomba(boolean vitoria){
+        int tempo = 1;
+        escurecerCenario();
+        esperarSegundos(tempo,(ActionEvent) -> {
+            musicaPrincipal.stop();
+            tocaEfeitosSonoros("suspense.wav");
+        });
+        
+        tempo += 12;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("explosao.wav");
+        });
+        
+        tempo += 2;
+        esperarSegundos(tempo, (ActionEvent) -> {
+            if(vitoria){
+                vitoriaFinal();
+                tocaEfeitosSonoros("sucesso.wav");
+                tocarMusica("vitoria.wav");
+                exibirAlerta("Fim de jogo! Você venceu!");
+            }else{
+                tocaEfeitosSonoros("errou.wav");
+                exibirAlerta("Fim de jogo! Você perdeu :( !");
+            }
+        });
+        
+        
+    }
+    
+    /** Método para tocar a música principal do jogo
+     * @param caminho - String do caminho da música 
+    */
+    private void tocarMusica(String caminho){
         try{
             
             
@@ -90,6 +164,9 @@ public class TelaPrincipal {
         }
     }
     
+    /** Método para tocar sons de efeitos sonoros
+     * @param nomeMusica - nome e extensão do arquivo na pasta "assets/sounds/"
+    */
     private void tocaEfeitosSonoros(String nomeMusica){
         try{
             URL som = getClass().getClassLoader().getResource("assets/sounds/"+nomeMusica);       
@@ -103,50 +180,98 @@ public class TelaPrincipal {
         }
     }
     
-    public void abrirPorta(String novoAmbiente){
+    /** Método para esperar algum tempo e depois executar alguma ação
+     * @param tempo - Tempo em segundos que deve ser esperado
+     * @param taskPerformer - Ações que serão realizadas depois de alguns segundos
+    */
+    private void esperarSegundos(int tempo,ActionListener taskPerformer){
         try{
-            escurecerCenario();
-            painelCentro.revalidate();
-            painelCentro.repaint();
-            TimeUnit.SECONDS.sleep(1);
-            tocaEfeitosSonoros("abrindo_porta.wav");
-            TimeUnit.SECONDS.sleep(2);
-            posicionaPersonagem(novoAmbiente);
-            painelCentro.revalidate();
-            painelCentro.repaint();
+            tempo *= 1000;
+            Timer t = new Timer(tempo, taskPerformer);
+            t.setRepeats(false);
+            t.start();
         }catch(Exception e){
             JOptionPane.showMessageDialog(janela, "ERRO!");
         }
         
     }
     
+    /** Método para exibir um JOptionPane de alerta
+     * @param info - String que será exibida no painel
+    */
+    public void exibirAlerta(String info){
+        JOptionPane.showMessageDialog(this.getParent(), info);
+    }
     
+    /** Muda o personagem para o local passado por parâmetro 
+    * @param novoAmbiente - Novas dicas que serão exibidas para o usuário (Opções váidas: [escritorio,jantar,tv,jardim,cozinha,banheiro1,quarto1,quarto2,quarto3,quarto4,banheiro2])
+    */
+    public void abrirPorta(String novoAmbiente) throws AmbienteException{
+        if(!localPosicao.containsKey(novoAmbiente))
+            throw new AmbienteException("Esse ambiente não existe!");
+        
+        escurecerCenario();
+        int tempo = 1;
+        
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("abrindo_porta.wav");
+        });
+        
+        tempo += 2;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            posicionaPersonagem(novoAmbiente);
+        });
+        
+    }
+    /** Personagem tentou mudar de ambiente porém sem sucesso 
+    */
+    public void portaTrancada(){
+        escurecerCenario();
+        int tempo = 1;
+        
+        esperarSegundos(tempo,(ActionEvent) -> {
+            tocaEfeitosSonoros("porta_fechada.wav");
+        });
+        
+        tempo += 1;
+        esperarSegundos(tempo,(ActionEvent) -> {
+            posicionaPersonagem(localAtual);
+        });
+    }
     
+    /** Método que monta o painel
+     * 
+    */
     private void montarJanela(){
-        janela.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        janela.setResizable(false);
-        janela.setLayout(new BorderLayout());
-        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
         
-        janela.add(painelBaixo,BorderLayout.SOUTH);
-        janela.add(painelEsquerda,BorderLayout.WEST);
-        janela.add(painelCentro,BorderLayout.CENTER);
-        janela.add(painelDireita,BorderLayout.EAST);
         
-        //janela.pack();
+        this.add(painelBaixo,BorderLayout.SOUTH);
+        this.add(painelEsquerda,BorderLayout.WEST);
+        this.add(painelCentro,BorderLayout.CENTER);
+        this.add(painelDireita,BorderLayout.EAST);
+
     }
 
+    /** Método que monta painel da esquerda
+     * 
+    */
     private void montarPainelEsq() {
         painelEsquerda = new JPanel();
+        painelEsquerda.setBackground(Color.BLACK);
         
         painelEsquerda.setLayout(new BoxLayout(painelEsquerda, BoxLayout.Y_AXIS));
         
         JLabel rotulo = new JLabel("<html>Número de tentativas restantes:</html>");
+        
         rotulo.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+        rotulo.setForeground(Color.WHITE);
         rotulo.setPreferredSize(new Dimension(50,100));
         painelEsquerda.add(rotulo);
         
         inpTentativasRestantes = new JTextField("0");
+        inpTentativasRestantes.setBackground(Color.black);
+        inpTentativasRestantes.setForeground(Color.white);
         inpTentativasRestantes.setEditable(false);
         inpTentativasRestantes.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
         inpTentativasRestantes.setMaximumSize(new Dimension(100,50));
@@ -157,9 +282,12 @@ public class TelaPrincipal {
         rotulo = new JLabel("<html>Durabilidade da chave mestra:</html>");
         rotulo.setPreferredSize(new Dimension(200,100));
         rotulo.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+        rotulo.setForeground(Color.white);
         painelEsquerda.add(rotulo);
         
         inpDurabilidadeChaveMestra = new JTextField("0");
+        inpDurabilidadeChaveMestra.setBackground(Color.black);
+        inpDurabilidadeChaveMestra.setForeground(Color.white);
         inpDurabilidadeChaveMestra.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
         inpDurabilidadeChaveMestra.setEditable(false);
         inpDurabilidadeChaveMestra.setMaximumSize(new Dimension(100,50));
@@ -168,38 +296,60 @@ public class TelaPrincipal {
         
     }
 
+    /** Método que monta o painel da direita
+     * 
+    */
     private void montarPainelDir() {
         painelDireita = new JPanel();
+        painelDireita.setBackground(Color.black);
         painelDireita.setLayout(new BoxLayout(painelDireita, BoxLayout.Y_AXIS));
-        /* LABEL TESTE! */
         JLabel rotulo = new JLabel("<html>Dicas encontradas:</html>");
+        rotulo.setForeground(Color.white);
         rotulo.setPreferredSize(new Dimension(200,100));
         rotulo.setFont(new Font(Font.DIALOG,Font.BOLD,20));
         painelDireita.add(rotulo);
         
         inpDicas = new JTextArea();
-        inpDicas.setBackground(new Color(0,0,0,0));
-        inpDicas.setText("teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste ");
+        inpDicas.setBackground(Color.black);
+        inpDicas.setForeground(Color.white);
+        inpDicas.setBorder(BorderFactory.createEmptyBorder());
+        inpDicas.setText("");
         inpDicas.setLineWrap(true);
         inpDicas.setWrapStyleWord(true);
         inpDicas.setFont(new Font(Font.DIALOG,Font.BOLD,15));
         inpDicas.setEditable(false);
         inpDicas.setColumns(1);
         JScrollPane scrollPane = new JScrollPane(inpDicas);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         painelDireita.add(scrollPane);
         
     }
 
+    /** Método que monta o painel de baixo
+     * 
+    */
     private void montarPainelBaixo() {
         painelBaixo = new JPanel();
+        
+
         painelBaixo.setLayout(new BoxLayout(painelBaixo, BoxLayout.Y_AXIS));
         
         inpInfos = new JTextArea();
+        inpInfos.setBackground(Color.black);
+        inpInfos.setForeground(Color.white);
         inpInfos.setFont(new Font(Font.DIALOG,Font.ITALIC,16));
-        inpInfos.setRows(8);
+        inpInfos.setRows(5);
+        inpInfos.setText("");
+        inpInfos.setLineWrap(true);
+        inpInfos.setWrapStyleWord(true);
+        
         inpInfos.setEditable(false);
         
-        painelBaixo.add(inpInfos);
+        
+        JScrollPane scrollPane = new JScrollPane(inpInfos);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        painelBaixo.add(scrollPane);
+        
         
         inpEntrada = new JTextField();
         inpEntrada.setFont(new Font(Font.DIALOG_INPUT,Font.ITALIC,16));
@@ -207,6 +357,9 @@ public class TelaPrincipal {
         
     }
 
+    /** Método que monta o painel do centro (mapa)
+     * 
+    */
     private void montarPainelCentro() {
         
         Image img = new ImageIcon(getClass().getClassLoader().getResource("assets/img/cenario.png"))
@@ -214,12 +367,23 @@ public class TelaPrincipal {
                 .getScaledInstance(850, 550, Image.SCALE_DEFAULT);
         
         painelCentro = new ImagePanel(img);
+        
+        painelCentro.setMinimumSize(new Dimension(900,600));
+        painelCentro.setMaximumSize(new Dimension(900,600));
+        painelCentro.setPreferredSize(new Dimension(900,600));
+        //painelBaixo.setSize(new Dimension(900,600));
+        
         painelCentro.setLayout(gridLayoutCentro);
-
-        posicionaPersonagem("tv");
+        painelCentro.setBorder(BorderFactory.createEmptyBorder());
+        painelCentro.setBackground(Color.black);
+        posicionaPersonagem(localAtual);
         
         
     }
+    
+    /** Método que posiciona o personagem em algum ambiente
+     * 
+    */
     private void posicionaPersonagem(String local){
         painelCentro.removeAll();
         int posI = localPosicao.get(local)[0];
@@ -243,8 +407,11 @@ public class TelaPrincipal {
                     rotulo.setOpaque(true);
                     
                     int opacidade;
-                    int conta = Math.abs(i - posI) + Math.abs(j - posJ) - 2;
-                    opacidade = Math.abs(conta * 30);
+                    int conta;
+                    conta = Math.abs(i - posI) + Math.abs(j - posJ);
+                    if(conta <= 2)
+                        conta = 0;
+                    opacidade = Math.abs(conta * 60);
                     if(opacidade > 255) opacidade= 255;
                     
                     
@@ -256,11 +423,58 @@ public class TelaPrincipal {
         }
     } 
     
+    /** Método que exibe a vitória para o usuário
+     * 
+    */
+    private void vitoriaFinal(){
+        
+        painelCentro.removeAll();
+        int posI = localPosicao.get(localAtual)[0];
+        int posJ = localPosicao.get(localAtual)[1];
+        
+        
+        
+        for(int i=0;i<gridLayoutCentro.getRows();i++){
+            for(int j=0;j<gridLayoutCentro.getColumns();j++){
+                if(i==posI && posJ == j){
+
+                    JLabel rotulo = new JLabel("");
+                    ImageIcon imgPersonagem = new ImageIcon( (new ImageIcon(getClass().getClassLoader().getResource("assets/img/diamanteMexe.gif")))
+                            .getImage()
+                            .getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+
+                    rotulo.setIcon(imgPersonagem);
+                    rotulo.setHorizontalAlignment(JLabel.CENTER);
+                    rotulo.setVerticalAlignment(JLabel.CENTER);
+                    painelCentro.add(rotulo );
+                }else if(i == posI + 1  && posJ == j){
+                    JLabel rotulo = new JLabel("");
+                    ImageIcon imgPersonagem = new ImageIcon( (new ImageIcon(getClass().getClassLoader().getResource("assets/img/pMexe.gif")))
+                            .getImage()
+                            .getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+
+                    rotulo.setIcon(imgPersonagem);
+                    rotulo.setHorizontalAlignment(JLabel.CENTER);
+                    rotulo.setVerticalAlignment(JLabel.CENTER);
+                    painelCentro.add(rotulo );
+                }else{
+                    JLabel rotulo = new JLabel("");
+                    painelCentro.add(rotulo);
+                }
+            }
+        }
+        painelCentro.revalidate();
+        painelCentro.repaint();
+    } 
+    
     public void exibir(){
         janela.setVisible(true);
     }
 
-    private void inicializarHasMap() {
+    /** Método que inicializa o HasMap de locais (associa local com posição no mapa)
+     * 
+    */
+    private void inicializarHashMap() {
         int pos[] = new int[2];
         
         pos[0] = 1;
@@ -278,7 +492,7 @@ public class TelaPrincipal {
         localPosicao.put("tv", pos);
         
         pos = new int[2];
-        pos[0] = 7;
+        pos[0] = 6;
         pos[1] = 3;
         localPosicao.put("jardim", pos);
         
@@ -320,6 +534,9 @@ public class TelaPrincipal {
         
     }
 
+    /** Método que escurece o mapa
+     * 
+    */
     private void escurecerCenario() {
         painelCentro.removeAll();
         for(int i=0;i<gridLayoutCentro.getRows();i++){

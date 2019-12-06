@@ -5,18 +5,10 @@
  */
 package Controll;
 
-import View.TelaPrincipal;
-import java.util.concurrent.TimeUnit;
 
-/**
- *
- * @author leoam
- */
+
 public class Main{
     public static void main(String[] args) throws Exception{
-        TelaPrincipal tp = new TelaPrincipal();
-        tp.exibir();
-        TimeUnit.SECONDS.sleep(5);
-        tp.abrirPorta("escritorio");
+        Controlador c = Controlador.getInstance();
     }
 }
